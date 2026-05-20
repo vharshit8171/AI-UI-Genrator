@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Syne", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "DM Mono", monospace;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@keyframes pulseDot {
+  0%, 100% { box-shadow: 0 0 6px #f97316; }
+  50%       { box-shadow: 0 0 14px #f97316; }
+}
+
+.animate-fade-up   { animation: fadeUp 0.6s ease both; }
+.animate-fade-up-1 { animation: fadeUp 0.6s ease 0.1s both; }
+.animate-fade-up-2 { animation: fadeUp 0.6s ease 0.2s both; }
+.animate-fade-up-3 { animation: fadeUp 0.6s ease 0.3s both; }
+.animate-fade-up-4 { animation: fadeUp 0.6s ease 0.4s both; }
+.animate-blink     { animation: blink 1s step-end infinite; }
+.animate-pulse-dot { animation: pulseDot 2s ease-in-out infinite; }
+
+* { box-sizing: border-box; }
+
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { background: #0a0907; }
+::-webkit-scrollbar-thumb { background: rgba(249,115,22,0.4); border-radius: 3px; }
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}

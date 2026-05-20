@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBki11E9qd3NCTX1sebLYpJJfc6_ZF86mQ",
+  apiKey: import.meta.env.VITE_FIREBASE_KEY,
   authDomain: "ai-website-builder-6f293.firebaseapp.com",
   projectId: "ai-website-builder-6f293",
   storageBucket: "ai-website-builder-6f293.firebasestorage.app",

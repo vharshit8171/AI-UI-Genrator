@@ -8,8 +8,8 @@ import ParticleCanvas from "../LandingPage/components/ParticleCanvas.jsx"
 export default function FeaturesPage() {
     const navigate = useNavigate();
 
-    const user = useAuthStore((s)=> s.user);
-    const isAuthenticated = useAuthStore((s)=> s.isAuthenticated);
+    const user = useAuthStore((s) => s.user);
+    const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
     return (
         <div className="relative min-h-screen w-full overflow-x-hidden"
@@ -21,10 +21,10 @@ export default function FeaturesPage() {
             <div className="fixed bottom-0 right-0 w-100 h-100 pointer-events-none z-0"
                 style={{ background: "radial-gradient(ellipse, rgba(245,158,11,0.05) 0%, transparent 70%)" }} />
 
-            <div className="relative z-10 pt-24 pb-28 px-6">
+            <div className="relative z-10 pt-24 pb-10 px-6">
                 <div className="max-w-5xl mx-auto">
 
-                    <div className="text-center mb-20">
+                    <div className="text-center mb-10">
                         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-orange-500/25 bg-orange-500/8 mb-5"
                             style={{ fontFamily: "Syne, sans-serif" }}>
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
@@ -50,7 +50,7 @@ export default function FeaturesPage() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden mb-20 border border-white/5"
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-px rounded-xl overflow-hidden mb-14 border border-white/5"
                         style={{ background: "rgba(255,255,255,0.03)" }}>
                         {STATS.map(({ value, label }) => (
                             <div
@@ -73,8 +73,8 @@ export default function FeaturesPage() {
                     </div>
 
                     {FEATURES.map(({ category, items }) => (
-                        <div key={category} className="mb-16">
-                            <div className="flex items-center gap-3 mb-8">
+                        <div key={category} className="mb-12">
+                            <div className="flex items-center gap-4 mb-8">
                                 <div className="h-px flex-1 bg-linear-to-r from-transparent via-orange-500/20 to-transparent" />
                                 <span
                                     className="text-md font-bold tracking-widest uppercase text-orange-500/60 px-3"
@@ -85,7 +85,7 @@ export default function FeaturesPage() {
                                 <div className="h-px flex-1 bg-linear-to-r from-transparent via-orange-500/20 to-transparent" />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                                 {items.map((feature, i) => (
                                     <FeatureCard key={feature.title} {...feature} index={i} />
                                 ))}
@@ -93,14 +93,13 @@ export default function FeaturesPage() {
                         </div>
                     ))}
 
-                    <div className="mt-20 text-center">
-                        <div className="inline-flex flex-col items-center gap-6 px-12 py-10 rounded-lg border border-orange-500/15 relative overflow-hidden"
+                    <div className="mt-16 text-center">
+                        <div className="inline-flex flex-col items-center gap-4 px-12 py-8 rounded-lg border border-orange-500/15 relative overflow-hidden"
                             style={{ background: "linear-gradient(135deg, rgba(249,115,22,0.06), rgba(10,9,7,0.95))" }}>
                             <div className="absolute inset-0 pointer-events-none"
                                 style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.1), transparent 65%)" }} />
 
-                            <h2 className="text-5xl font-black text-white relative z-10"
-                                style={{ fontFamily: "Syne, sans-serif" }}>
+                            <h2 className="text-5xl font-black text-white relative z-10" style={{ fontFamily: "Syne, sans-serif" }}>
                                 Ready to start building?
                             </h2>
                             <p className="text-white/45 text-sm max-w-md text-center relative z-10"
@@ -109,15 +108,15 @@ export default function FeaturesPage() {
                                 do more with every credit.
                             </p>
                             <div className="flex items-center gap-3 relative z-10">
-                               {(!user && !isAuthenticated) && (
-                                 <button onClick={()=>{navigate("/auth")}}
-                                 className="bg-linear-to-br from-orange-500 to-amber-500 text-[#0a0907] font-bold px-6 py-3 rounded-lg shadow-[0_0_20px_rgba(249,115,22,0.35)] hover:-translate-y-px hover:shadow-[0_0_32px_rgba(249,115,22,0.6)] transition-all duration-200 border-none cursor-pointer"
-                                    style={{ fontFamily: "Syne, sans-serif" }}>
-                                    Get Started Free
-                                </button>
-                               )}
-                                <button onClick={()=>{navigate("/pricing")}}
-                                className="text-white/50 px-6 py-3 rounded-lg border border-white/8 hover:border-white/20 hover:text-white/80 transition-all duration-200 cursor-pointer bg-transparent"
+                                {(!user && !isAuthenticated) && (
+                                    <button onClick={() => { navigate("/auth") }}
+                                        className="bg-linear-to-br from-orange-500 to-amber-500 text-[#0a0907] font-bold px-6 py-3 rounded-lg shadow-[0_0_20px_rgba(249,115,22,0.35)] hover:-translate-y-px hover:shadow-[0_0_32px_rgba(249,115,22,0.6)] transition-all duration-200 border-none cursor-pointer"
+                                        style={{ fontFamily: "Syne, sans-serif" }}>
+                                        Get Started Free
+                                    </button>
+                                )}
+                                <button onClick={() => { navigate("/pricing") }}
+                                    className="text-white/50 px-6 py-3 rounded-lg border border-white/8 hover:border-white/20 hover:text-white/80 transition-all duration-200 cursor-pointer bg-transparent"
                                     style={{ fontFamily: "Syne, sans-serif" }}>
                                     View Pricing →
                                 </button>

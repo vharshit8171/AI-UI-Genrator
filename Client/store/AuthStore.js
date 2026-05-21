@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { signInWithPopup, fetchSignInMethodsForEmail } from "firebase/auth";
+import { signInWithPopup, fetchSignInMethodsForEmail, signOut } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "../src/config/firebase.js";
 
 const BASE_URL = "http://localhost:3000/api/v1/user";
@@ -20,12 +20,10 @@ const mapUser = (user) => ({
   name: user.name,
   email: user.email,
   contactNumber: user.contactNumber,
+  pages: user.pages || [],
   avatar: user.avatar?.url || null,
-  websites: user.websites || [],
-  deployedWebsites: user.deployedWebsites || [],
   role: user.role,
   authProvider: user.authProvider,
-  providers: user.providers || [],
   credits: user.credits,
 });
 
@@ -232,6 +230,7 @@ const useAuthStore = create(
         _setSuccess("socialLogin", false);
 
         try {
+          await signOut(auth);
           await delay(800);
           let provider;
           if (providerType === "google") provider = googleProvider;
@@ -249,7 +248,7 @@ const useAuthStore = create(
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ idToken }),
+            body: JSON.stringify({ idToken}),
             credentials: "include",
           });
 
@@ -259,7 +258,7 @@ const useAuthStore = create(
 
           const data = await response.json();
           const user = mapUser(data.data);
-
+          console.log("social user", user);
           set({user,
               isAuthenticated: true,
               isInitialized: true,
@@ -271,6 +270,7 @@ const useAuthStore = create(
           _setSuccess("socialLogin", true);
           return { success: true, user };
         } catch (err) {
+          await signOut(auth);
           let message = err?.message || "Login failed. Please try again.";
 
           // Allowing user to login only from the provider they originally signed up with
@@ -311,6 +311,7 @@ const useAuthStore = create(
           if (!response.ok) {
             throw new Error(await extractErrorMessage(response, "Logout failed"));
           }
+          await signOut(auth);
 
           set({user: null,
               isAuthenticated: false,
@@ -348,6 +349,7 @@ const useAuthStore = create(
           if (!response.ok) {
             throw new Error(await extractErrorMessage(response, "Account deletion failed"));
           }
+          await signOut(auth);
 
           set({...initialState,
               isInitialized: true,

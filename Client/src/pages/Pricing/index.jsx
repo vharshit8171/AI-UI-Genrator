@@ -7,48 +7,23 @@ import useAuthStore from "../../../store/AuthStore.js";
 import ParticleCanvas from "../LandingPage/components/ParticleCanvas.jsx";
 import { PLANS, FAQS, LOGOS } from "../../constants/pricingData.jsx";
 
-function Navbar() {
-  return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-8 border-b border-white/6 bg-[#0a0907]/90 backdrop-blur-xl">
-      <div className="max-w-6xl mx-auto flex items-center justify-between h-16">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center text-sm font-black text-[#0a0907]"
-            style={{ fontFamily: "Syne, sans-serif" }}>
-            B
-          </div>
-          <span className="text-white text-lg font-black tracking-tight" style={{ fontFamily: "Syne, sans-serif" }}>
-            Buildr
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="text-white/50 text-sm px-4 py-2 hover:text-white transition-colors bg-transparent border-none cursor-pointer">
-            Sign In
-          </button>
-          <button className="bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-5 py-2.5 rounded-lg transition-all duration-200 hover:-translate-y-px border-none cursor-pointer">
-            Get Started Free
-          </button>
-        </div>
-      </div>
-    </nav>
-  );
-}
 
 function HeroSection({ yearly, onToggle }) {
   return (
-    <section className="relative z-10 pt-22 pb-16 px-8 text-center">
+    <section className="relative z-10 pt-22 pb-14 px-8 text-center">
       <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/25 rounded-full px-4 py-1 mb-2">
         <span className="w-1.5 h-1.5 rounded-full bg-orange-500" style={{ boxShadow: "0 0 8px #f97316" }} />
         <span className="text-[12px] text-orange-400 font-semibold tracking-widest uppercase">Simple Pricing</span>
       </div>
 
-      <h1 className="text-white font-black tracking-tight max-w-4xl mx-auto"
+      <h1 className="text-white font-black tracking-tighter leading-[1.08] max-w-4xl mx-auto"
         style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(36px, 5vw, 64px)" }}>
         Pay for what you{" "}
         <span className="bg-orange-500 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
           actually use
         </span>
       </h1>
-      <p className="text-white/40 text-md max-w-xl mx-auto mb-3.5">
+      <p className="text-white/40 text-md max-w-xl mx-auto mb-3">
         No hidden fees. No surprises. Start free and scale when you're ready.
       </p>
 
@@ -61,7 +36,7 @@ function HeroSection({ yearly, onToggle }) {
 
 function PlansSection({ yearly }) {
   return (
-    <section className="relative z-10 px-8 pb-24">
+    <section className="relative z-10 px-8 pb-18">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
         {PLANS.map((plan) => (
           <PlanCard key={plan.id} plan={plan} yearly={yearly} />
@@ -73,13 +48,13 @@ function PlansSection({ yearly }) {
 
 function LogosSection() {
   return (
-    <section className="relative z-10 px-8 py-12 border-y border-white/8">
+    <section className="relative z-10 px-8 py-8 border-y border-white/8">
       <div className="max-w-4xl mx-auto text-center">
         <p className="text-white/35 text-sm uppercase tracking-widest mb-8">Trusted by teams at</p>
         <div className="flex items-center justify-center gap-10 flex-wrap">
           {LOGOS.map((logo) => (
             <span key={logo}
-              className="text-white/20 text-sm font-bold tracking-wide hover:text-white/40 transition-colors"
+              className="text-white/20 text-lg font-bold tracking-wide hover:text-white/40 transition-colors"
               style={{ fontFamily: "Syne, sans-serif" }}
             >
               {logo}
@@ -93,10 +68,10 @@ function LogosSection() {
 
 function FAQSection() {
   return (
-    <section className="relative z-10 px-8 py-18">
+    <section className="relative z-10 px-8 py-8">
       <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <p className="text-[14px] text-orange-500 font-semibold tracking-[0.12em] uppercase mb-3">FAQ</p>
+        <div className="text-center mb-8">
+          <p className="text-[20px] text-orange-500 font-semibold tracking-[0.12em] uppercase mb-3">FAQ</p>
           <h2 className="text-white font-black tracking-tight"
             style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(26px, 3.5vw, 40px)" }}>
             Questions answered
@@ -119,8 +94,8 @@ function CTASection() {
   const isAuthenticated = useAuthStore((s)=> s.isAuthenticated);
 
   return (
-    <section className="relative z-10 px-8 pb-22">
-      <div className="max-w-4xl mx-auto relative overflow-hidden bg-orange-500/6 border border-orange-500/18 rounded-2xl px-10 py-16 text-center">
+    <section className="relative z-10 px-8 pb-12">
+      <div className="max-w-4xl mx-auto relative overflow-hidden bg-orange-500/6 border border-orange-500/18 rounded-xl px-10 py-16 text-center">
         <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-96 h-64 rounded-full pointer-events-none"
           style={{ background: "radial-gradient(ellipse, rgba(249,115,22,0.1) 0%, transparent 70%)" }}
         />
@@ -146,7 +121,7 @@ function CTASection() {
 
 function Footer() {
   return (
-    <footer className="relative z-10 border-t border-white/5 px-8 py-6">
+    <footer className="relative z-10 border-t border-white/5 px-8 py-4">
       <div className="max-w-6xl mx-auto flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-2.5">
           <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center text-lg font-black text-[#0a0907]"
@@ -157,7 +132,7 @@ function Footer() {
         </div>
         <div className="flex gap-7">
           {["Privacy", "Terms", "Status", "Twitter"].map((link) => (
-            <a key={link} href="#" className="text-white/50 text-[14px] no-underline hover:text-amber-400 transition-colors">
+            <a key={link} href="#" className="text-white/50 text-[16px] no-underline hover:text-amber-400 transition-colors">
               {link}
             </a>
           ))}

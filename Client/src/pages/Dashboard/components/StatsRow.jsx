@@ -4,11 +4,10 @@ import { ArrowUpRight } from "lucide-react";
 export default function StatsRow() {
 
   const user = useAuthStore((state) => state.user);
-
   const STATS = [
-    { label: "Total Sites", value: `${user.websites.length || 0}`, sub: "This month" },
-    { label: "Draft", value: `${user.websites.length - user.deployedWebsites.length}`, sub: "Not deployed Yet" },
-    { label: "Deployments", value: `${user.deployedWebsites?.length || 0}`, sub: "Last 30 days" },
+    { label: "Total Pages", value: `${user.pages.length || 0}`, sub: "Generated UIs" },
+    {label: "Last Generated",value: "2h ago",sub: "Dashboard UI",},
+    {label: "Top Style",value: "Modern",sub: "Most generated",},
   ];
 
   return (

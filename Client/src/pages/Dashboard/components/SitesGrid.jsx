@@ -1,12 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import SiteCard from "./SiteCard";
 import { useNavigate } from "react-router-dom";
 import useSiteStore from "../../../../store/SiteStore.js";
 
-const FILTERS = ["All", "Draft", "Published"];
-
 export default function SitesGrid() {
-  const [filter, setFilter] = useState("All");
 
   const sites = useSiteStore((state) => state.sites);
   const fetchSites = useSiteStore((state) => state.fetchSites);
@@ -27,22 +24,7 @@ export default function SitesGrid() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-1 bg-white/4 border border-white/6 rounded-md p-1">
-          {FILTERS.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`text-sm px-4 py-1.5 rounded-md transition-all duration-150 cursor-pointer border-none ${filter === f
-                  ? "bg-orange-500/20 text-orange-400 font-semibold"
-                  : "bg-transparent text-white/40 hover:text-white/70"
-                }`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
-
+      <div className="flex items-center justify-end mb-5">
         <button onClick={() => { navigate("/editor") }}
           className="flex items-center gap-1 bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-4 py-2.5 rounded-md transition-all duration-200 cursor-pointer border-none hover:-translate-y-px">
           <span className="mb-1 text-2xl leading-none">+</span>
@@ -51,8 +33,20 @@ export default function SitesGrid() {
       </div>
 
       {sites.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-white/70 text-md">No sites yet.</p>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div className="w-14 h-14 rounded-md bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-2">
+            <span className="text-2xl">✨</span>
+          </div>
+
+          <h3 className="text-white text-xl font-bold tracking-tight mb-2"
+            style={{ fontFamily: "Syne, sans-serif" }}>
+            No pages generated yet
+          </h3>
+
+          <p className="text-white/40 max-w-sm text-sm leading-tight">
+            Start by describing your idea and let AI generate your first
+            beautiful single-page UI in seconds.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

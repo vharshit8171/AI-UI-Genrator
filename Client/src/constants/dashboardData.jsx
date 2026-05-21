@@ -2,9 +2,9 @@ import {Home, LayoutDashboard, FolderKanban,  Sparkles,CreditCard} from "lucide-
 
 export const PLAN = {
   name: "Free",
-  sitesUsed: 3,
+  sitesUsed: 1,
   sitesTotal: 3,
-  aiUsed: 18,
+  aiUsed: 15,
   aiTotal: 25,
   bandwidth: "1.2 GB",
   bandwidthTotal: "5 GB",

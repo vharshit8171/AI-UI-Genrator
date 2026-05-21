@@ -1,4 +1,6 @@
 import { PLAN } from "../../../constants/dashboardData.jsx";
+import { useNavigate } from "react-router-dom";
+
 
 function UsageBar({ label, used, total, unit = "" }) {
   const pct = Math.min((used / total) * 100, 100);
@@ -23,9 +25,11 @@ function UsageBar({ label, used, total, unit = "" }) {
 }
 
 export default function PlanUsage() {
+
+  const navigate = useNavigate();
   return (
     <div className="bg-white/3 border border-white/6
-     rounded-lg p-4">
+     rounded-md p-4">
       <div className="flex items-center justify-between mb-5">
         <div>
           <p className="text-white/40 text-xs uppercase tracking-widest mb-1">Current Plan</p>
@@ -33,7 +37,8 @@ export default function PlanUsage() {
             {PLAN.name}
           </p>
         </div>
-        <button className="bg-orange-500/15 border border-orange-500/25 text-orange-400 text-xs font-semibold px-3.5 py-2 rounded-md hover:bg-orange-500/25 transition-colors cursor-pointer">
+        <button onClick={() => navigate("/pricing")}
+          className="bg-orange-500/15 border border-orange-500/25 text-orange-400 text-xs font-semibold px-3.5 py-2 rounded-md hover:bg-orange-500/25 transition-colors cursor-pointer">
           Upgrade →
         </button>
       </div>

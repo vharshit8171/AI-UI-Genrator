@@ -7,18 +7,18 @@ function FeatureCard({ feature }) {
   return (
     <div onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative p-8 bg-[#0a0907] transition-colors duration-300 cursor-default overflow-hidden hover:bg-orange-500/[0.07]">
+      className="relative p-7 bg-[#0a0907] transition-colors duration-300 cursor-default overflow-hidden hover:bg-orange-500/[0.07]">
       {hovered && (
         <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-orange-500 to-transparent" />
       )}
 
-      <span className="text-3xl mb-3.5 block">{feature.icon}</span>
+      <span className="text-4xl mb-3.5 block">{feature.icon}</span>
       <h3 className="text-white font-bold text-[20px] mb-2 tracking-tight"
         style={{ fontFamily: "Syne, sans-serif" }}
       >
         {feature.title}
       </h3>
-      <p className="text-white/50 text-sm leading-relaxed">
+      <p className="text-white/50 text-md leading-relaxed">
         {feature.desc}
       </p>
     </div>
@@ -27,11 +27,11 @@ function FeatureCard({ feature }) {
 
 export default function FeaturesSection() {
   return (
-    <section className="relative z-10 px-8 py-16">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative z-10 px-8 py-8">
+      <div className="max-w-7xl mx-auto">
 
-        <div className="text-center mb-16">
-          <p className="text-[14px] text-orange-500 font-semibold tracking-[0.12em] uppercase mb-3.5">
+        <div className="text-center mb-8">
+          <p className="text-[18px] text-orange-500 font-semibold tracking-[0.12em] uppercase mb-1">
             Capabilities
           </p>
           <h2 className="text-white font-black tracking-tight"

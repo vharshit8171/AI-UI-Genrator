@@ -1,5 +1,6 @@
 import Auth from "./pages/Auth";
 import { useEffect } from "react";
+import AppLoader from "./AppLoader.jsx";
 import EditorPage from "./pages/Editor";
 import PricingPage from "./pages/Pricing";
 import PublicRoute from "./PublicRoute.jsx";
@@ -57,7 +58,7 @@ const App = () => {
   if (!isInitialized) {
     return (
       <div className="h-screen flex items-center justify-center bg-black text-white">
-        <p>Loading app...</p>
+        <AppLoader />
       </div>
     );
   }

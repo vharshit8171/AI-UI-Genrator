@@ -73,10 +73,6 @@ export const FAQS = [
     a: "We offer a 14-day money-back guarantee on all paid plans, no questions asked.",
   },
   {
-    q: "Can I use my own domain?",
-    a: "Custom domains are available on Pro and Team plans. We handle SSL automatically.",
-  },
-  {
     q: "Is there a free trial for paid plans?",
     a: "Pro and Team plans come with a 7-day free trial. No credit card required to start.",
   },

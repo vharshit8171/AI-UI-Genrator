@@ -6,17 +6,13 @@ import PlanUsage from "./components/PlanUsage.jsx";
 import useAuthStore from "../../../store/AuthStore.js";
 
 export default function DashboardPage() {
-
   const user = useAuthStore((state) => state.user);
 
   return (
     <div className="min-h-screen bg-[#0a0907] flex">
-
       <Sidebar />
-
       <main className="flex-1 ml-16 min-h-screen">
         <div className="max-w-7xl mx-auto mt-12 px-4 py-8">
-
           <div className="flex items-center justify-between mb-5">
             <div>
               <h1 className="text-white font-black text-2xl tracking-tight" style={{ fontFamily: "Syne, sans-serif" }}>
@@ -29,13 +25,10 @@ export default function DashboardPage() {
               <span className="text-white/50 text-sm">All systems operational</span>
             </div>
           </div>
-
           <StatsRow />
-
-          <div className="my-6">
+          <div className="my-5">
             <AIPromptBar />
           </div>
-
           <div className="flex gap-6 items-start">
             <div className="flex-1 min-w-0">
               <SitesGrid />
@@ -44,10 +37,8 @@ export default function DashboardPage() {
               <PlanUsage />
             </div>
           </div>
-
         </div>
       </main>
-
     </div>
   );
 }

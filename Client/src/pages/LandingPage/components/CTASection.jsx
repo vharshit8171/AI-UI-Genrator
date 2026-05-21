@@ -8,18 +8,18 @@ export default function CTASection() {
   const isAuthenticated = useAuthStore((s)=> s.isAuthenticated);
 
   return (
-    <section className="relative z-10 px-8 pt-10 pb-28">
-      <div className="max-w-5xl mx-auto relative overflow-hidden bg-orange-500/6 border border-orange-500/18 rounded-3xl px-10 py-20 text-center">
+    <section className="relative z-10 px-8 pt-8 pb-8">
+      <div className="max-w-5xl mx-auto relative overflow-hidden bg-orange-500/6 border border-orange-500/18 rounded-2xl px-10 py-8 text-center">
 
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-125 h-75 rounded-full pointer-events-none"
           style={{ background: "radial-gradient(ellipse, rgba(249,115,22,0.1) 0%, transparent 70%)" }}
         />
 
-        <h2 className="relative text-white font-black tracking-tight mb-2"
-          style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(30px, 4.5vw, 58px)" }}>
+        <h2 className="relative text-white font-black tracking-tight"
+          style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(25px, 4.5vw, 50px)" }}>
           Start building for free
         </h2>
-        <p className="relative text-white/40 text-lg mb-10">
+        <p className="relative text-white/40 text-lg mb-6">
           No credit card. No setup. Just describe and ship.
         </p>
 

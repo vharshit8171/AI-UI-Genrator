@@ -2,7 +2,7 @@ import { FOOTER_LINKS } from "../../../constants/landingData.jsx";
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 border-t border-white/5 px-8 py-6">
+    <footer className="relative z-10 border-t border-white/5 px-8 py-3">
       <div className="max-w-6xl mx-auto flex items-center justify-between flex-wrap gap-4">
 
         <div className="flex items-center gap-2.5">
@@ -10,7 +10,7 @@ export default function Footer() {
             style={{ fontFamily: "Syne, sans-serif" }}>
             B
           </div>
-          <span className="text-white/50 text-[14px]">
+          <span className="text-white/50 text-[16px]">
             © 2025 Buildr. All rights reserved.
           </span>
         </div>
@@ -19,7 +19,7 @@ export default function Footer() {
           {FOOTER_LINKS.map((link) => (
             <a key={link}
               href="#"
-              className="text-white/50 text-[14px] no-underline transition-colors duration-200 hover:text-amber-400">
+              className="text-white/50 text-[16px] no-underline transition-colors duration-200 hover:text-amber-400">
               {link}
             </a>
           ))}

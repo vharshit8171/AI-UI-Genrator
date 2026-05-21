@@ -29,11 +29,11 @@ function TestimonialCard({ testimonial }) {
 
 export default function TestimonialsSection() {
   return (
-    <section className="relative z-10 px-8 py-16">
+    <section className="relative z-10 px-8 py-4">
       <div className="max-w-5xl mx-auto">
 
-        <div className="text-center mb-14">
-          <p className="text-[14px] text-orange-500 font-semibold tracking-[0.12em] uppercase mb-3.5">
+        <div className="text-center mb-8">
+          <p className="text-[18px] text-orange-500 font-semibold tracking-[0.12em] uppercase mb-1">
             Loved by Builders
           </p>
           <h2 className="text-white font-black tracking-tight"

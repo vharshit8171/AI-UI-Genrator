@@ -5,12 +5,11 @@ export default function AuthLeftPanel() {
   const navigate = useNavigate();
 
   return (
-    <div className="hidden lg:flex flex-col justify-between w-120 shrink-0 bg-white/2 border-r border-white/6 p-10">
-
+    <div className="hidden lg:flex flex-col justify-between w-125 shrink-0 bg-white/2 px-10 py-5">
       <div>
         <div onClick={()=>{navigate("/")}} 
-        className="flex items-center gap-2 mb-8 cursor-pointer">
-          <div className="w-10 h-10 rounded-lg bg-orange-500 flex items-center justify-center text-lg font-black text-[#0a0907]"
+        className="flex items-center gap-2 mb-5 cursor-pointer">
+          <div className="w-10 h-10.5 rounded-lg bg-orange-500 flex items-center justify-center text-lg font-black text-[#0a0907]"
             style={{ fontFamily: "Syne, sans-serif" }}>
             B
           </div>
@@ -19,19 +18,19 @@ export default function AuthLeftPanel() {
           </span>
         </div>
 
-        <h2 className="text-white font-black leading-tight tracking-tight mb-2.5"
-          style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(28px, 3vw, 40px)" }}>
-          Build websites at the speed of thought
+        <h2 className="text-white font-black leading-tight tracking-tight mb-1"
+          style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(26px, 3vw, 37px)" }}>
+           Generate modern single-page UIs instantly
         </h2>
-        <p className="text-white/40 text-sm leading-relaxed mb-8">
+        <p className="text-white/40 text-sm leading-relaxed mb-4">
           Describe what you want. Our AI builds it. You ship it.
           No code, no templates.
         </p>
 
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2.5">
           {AUTH_FEATURES.map((f) => (
             <div key={f.text} className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-lg shrink-0">
+              <div className="w-10 h-10 rounded-sm bg-orange-500/15 border border-orange-500/25 flex items-center justify-center text-lg shrink-0">
                 {f.icon}
               </div>
               <span className="text-white/60 text-md">{f.text}</span>
@@ -40,7 +39,7 @@ export default function AuthLeftPanel() {
         </div>
       </div>
 
-      <div className="bg-white/3 border border-white/6 rounded-md p-4 mt-5">
+      <div className="bg-white/3 border border-white/6 rounded-sm p-4">
         <p className="text-white/60 text-md leading-relaxed mb-5">
           "I shipped my landing page in under 10 minutes. The AI understood
           my brand better than any designer I've hired."
@@ -56,7 +55,6 @@ export default function AuthLeftPanel() {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

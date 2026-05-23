@@ -30,7 +30,8 @@ export default function EditorCanvas({ device, siteData }) {
   if (!homePage) {
     return (
       <div className="flex-1 flex items-center justify-center text-white/70 text-center">
-        <p className="text-3xl">Hello,<span className="text-[27px]">{user.name}</span><br /> <span>How can i assist you today?</span></p>
+        <p className="text-3xl">Hello,<span className="text-[27px]">{user.name}</span><br /> <span>✨ Start building with AI
+        Describe your idea to generate a UI</span></p>
       </div>
     );
   }

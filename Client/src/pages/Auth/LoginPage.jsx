@@ -42,7 +42,6 @@ export default function LoginPage({ onNavigateToSignup }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.email || !formData.password) {
       setLocalError("Please fill in all fields.");
       return;
@@ -60,7 +59,6 @@ export default function LoginPage({ onNavigateToSignup }) {
   };
 
   const displayError = localError || serverError;
-
   return (
     <div className="min-h-screen bg-[#0a0907] flex">
 
@@ -70,44 +68,37 @@ export default function LoginPage({ onNavigateToSignup }) {
         <div className="w-full max-w-md">
 
           <div className="flex items-center gap-2 mb-10 lg:hidden">
-            <div
-              className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-xs font-black text-[#0a0907]"
-              style={{ fontFamily: "Syne, sans-serif" }}
-            >
+            <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-xs font-black text-[#0a0907]"
+              style={{ fontFamily: "Syne, sans-serif" }}>
               B
             </div>
-            <span
-              className="text-white font-black text-base tracking-tight"
-              style={{ fontFamily: "Syne, sans-serif" }}
-            >
+            <span className="text-white font-black text-base tracking-tight"
+              style={{ fontFamily: "Syne, sans-serif" }}>
               Buildr
             </span>
           </div>
 
-          <h1
-            className="text-white font-black tracking-tight mb-0.5"
-            style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(24px, 3vw, 32px)" }}
-          >
+          <h1 className="text-white font-black tracking-tight"
+            style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(26px, 3vw, 34px)" }}>
             Welcome back
           </h1>
-          <p className="text-white/40 text-sm ml-2.5 mb-8">
+          <p className="text-white/60 text-md ml-2.5 mb-8">
             Sign in to continue building.
           </p>
 
-          <div className="flex flex-col gap-3 mb-6">
+          <div className="flex flex-col gap-3.5 mb-6">
             {SOCIAL_PROVIDERS.map((provider) => (
               <SocialButton key={provider.name} provider={provider} onClick={() => { handleSocialLogin(provider) }} />
             ))}
           </div>
 
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center gap-3 mb-7">
             <div className="flex-1 h-px bg-white/8" />
-            <span className="text-white/25 text-xs">or continue with email</span>
+            <span className="text-white/45 text-sm">or continue with email</span>
             <div className="flex-1 h-px bg-white/8" />
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <AuthInput
               id="email"
               name="email"
@@ -119,14 +110,14 @@ export default function LoginPage({ onNavigateToSignup }) {
               disabled={isLoading}
             />
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
-                <label className="text-white/50 text-xs font-medium tracking-wide uppercase">
+                <label className="text-white/80 text-sm font-medium tracking-wide uppercase">
                   Password
                 </label>
                 <Link
                   to=""
-                  className="text-orange-400 text-xs hover:text-orange-300 transition-colors no-underline"
+                  className="text-orange-400 text-xs font-semibold hover:text-orange-300 transition-colors no-underline"
                 >
                   Forgot password?
                 </Link>
@@ -143,7 +134,7 @@ export default function LoginPage({ onNavigateToSignup }) {
             </div>
 
             {displayError && (
-              <p className="text-red-400/80 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+              <p className="text-red-400/80 text-sm font-semibold bg-red-500/10 border border-red-500/20 rounded-md px-3 py-2">
                 {displayError}
               </p>
             )}
@@ -157,11 +148,11 @@ export default function LoginPage({ onNavigateToSignup }) {
             </button>
           </form>
 
-          <p className="text-white/35 text-sm text-center mt-4">
+          <p className="text-white/55 text-sm text-center mt-2.5">
             Don't have an account?{" "}
             <button
               onClick={onNavigateToSignup}
-              className="text-orange-400 hover:text-orange-300 hover:underline transition-colors bg-transparent border-none cursor-pointer text-sm"
+              className="text-orange-400 hover:text-orange-300 hover:underline transition-colors bg-transparent border-none cursor-pointer text-sm font-semibold"
             >
               Sign up free
             </button>

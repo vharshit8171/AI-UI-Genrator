@@ -145,7 +145,6 @@ const useAuthStore = create(
           if (payload.avatar) {
             formData.append("avatar", payload.avatar);
           }
-
           const response = await fetch(`${BASE_URL}/register`, {
             method: "POST",
             body: formData,
@@ -258,7 +257,6 @@ const useAuthStore = create(
 
           const data = await response.json();
           const user = mapUser(data.data);
-          console.log("social user", user);
           set({user,
               isAuthenticated: true,
               isInitialized: true,

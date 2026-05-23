@@ -34,8 +34,8 @@ export default function HeroSection() {
         </span>
       </div>
 
-      <h1 className="animate-fade-up-1 text-white font-black leading-[1.02] tracking-tighter max-w-7xl mb-3.5"
-        style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(44px, 7.2vw, 92px)", }}>
+      <h1 className="animate-fade-up-1 text-white font-black leading-[1.02] tracking-tighter max-w-6xl mb-3.5"
+        style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(40px, 7.2vw, 80px)", }}>
         Generate stunning{" "}
         <span className="relative inline-block bg-linear-to-r from-orange-500 via-amber-400 to-orange-400 bg-clip-text text-transparent">
           single-page UIs

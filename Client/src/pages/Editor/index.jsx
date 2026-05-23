@@ -39,7 +39,6 @@ console.log("Selected Site in Editor:", selectedSite);
         onDeviceChange={setDevice}
         onPreview={() => window.open(`/preview/${selectedSite.id}/${selectedSite?.pages[0]?.path || ''}`, "_blank")}
         site={selectedSite}
-        onPublish={() => { }}
         onToggleCode={() => setIsCodeOpen(prev => !prev)}
       />
 

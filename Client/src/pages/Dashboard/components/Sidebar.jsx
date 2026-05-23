@@ -75,7 +75,7 @@ export default function Sidebar() {
             <img src={user.avatar} />
           </div>
 
-          <div className={`ml-1.5 flex flex-col overflow-hidden transition-all duration-200 
+          <div className={`ml-1.5 mb-1.5 flex flex-col overflow-hidden transition-all duration-200 
             ${expanded ? "opacity-100 w-auto" : "opacity-0 w-0"}`}>
             <span className="text-sm text-white/80 font-semibold">{user.name}</span>
             <span className="text-xs text-white/40">{user.email}</span>

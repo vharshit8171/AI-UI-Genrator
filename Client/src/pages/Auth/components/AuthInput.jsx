@@ -9,10 +9,10 @@ export default function AuthInput({ label, type = "text", placeholder, value, on
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-white/50 text-xs font-medium tracking-wide uppercase">
+      <label htmlFor={id} className="text-white/80 text-sm font-medium tracking-wide uppercase">
         {label}
       </label>
-      <div className={`relative flex items-center bg-white/4 border rounded-md transition-all duration-200 ${
+      <div className={`relative flex items-center bg-white/4 border rounded-sm transition-all duration-200 ${
         focused ? "border-orange-500/60 shadow-[0_0_0_3px_rgba(249,115,22,0.1)]" : "border-white/10"
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}>
         <input

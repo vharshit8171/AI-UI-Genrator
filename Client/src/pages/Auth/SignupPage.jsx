@@ -81,42 +81,34 @@ export default function SignupPage({ onNavigateToLogin }) {
   };
 
   const displayError = localError || serverError;
-
   return (
     <div className="min-h-screen bg-[#0a0907] flex">
 
       <AuthLeftPanel />
 
-      <div className="flex-1 flex items-center justify-center px-6 py-10">
+      <div className="flex-1 flex items-center justify-center px-6 py-5">
         <div className="w-full max-w-lg">
 
           <div className="flex items-center gap-2 mb-10 lg:hidden">
-            <div
-              className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-xs font-black text-[#0a0907]"
-              style={{ fontFamily: "Syne, sans-serif" }}
-            >
+            <div className="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-xs font-black text-[#0a0907]"
+              style={{ fontFamily: "Syne, sans-serif" }}>
               B
             </div>
-            <span
-              className="text-white font-black text-base tracking-tight"
-              style={{ fontFamily: "Syne, sans-serif" }}
-            >
+            <span className="text-white font-black text-base tracking-tight"
+              style={{ fontFamily: "Syne, sans-serif" }}>
               Buildr
             </span>
           </div>
 
-          <h1
-            className="text-white font-black tracking-tight"
-            style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(24px, 3vw, 32px)" }}
-          >
+          <h1 className="text-white font-black tracking-tight"
+            style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(24px, 3vw, 32px)" }}>
             Create your account
           </h1>
-          <p className="text-white/40 text-sm ml-1.5 mb-10">
+          <p className="text-white/50 text-sm ml-1.5 mb-5">
             Free forever. No credit card required.
           </p>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             <AvatarUpload preview={formData.preview} onFileChange={handleAvatarChange} />
 
             <AuthInput
@@ -203,18 +195,18 @@ export default function SignupPage({ onNavigateToLogin }) {
               </div>
               <span className="text-white/40 text-xs leading-relaxed">
                 I agree to the{" "}
-                <a href="#" className="text-orange-400 hover:text-orange-300 transition-colors">
+                <a href="#" className="text-orange-400 hover:text-orange-300 transition-colors font-semibold">
                   Terms of Service
                 </a>{" "}
                 and{" "}
-                <a href="#" className="text-orange-400 hover:text-orange-300 transition-colors">
+                <a href="#" className="text-orange-400 hover:text-orange-300 transition-colors font-semibold">
                   Privacy Policy
                 </a>
               </span>
             </label>
 
             {displayError && (
-              <p className="text-red-400/80 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+              <p className="text-red-400/80 text-sm font-semibold bg-red-500/10 border border-red-500/20 rounded-md px-3 py-2">
                 {displayError}
               </p>
             )}
@@ -228,7 +220,7 @@ export default function SignupPage({ onNavigateToLogin }) {
             </button>
           </form>
 
-          <p className="text-white/35 text-sm text-center mt-4">
+          <p className="text-white/50 text-sm text-center mt-2.5">
             Already have an account?{" "}
             <button
               onClick={onNavigateToLogin}

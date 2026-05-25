@@ -15,9 +15,7 @@ export default function EditorCanvas({ device, siteData }) {
   const selectedSite = useSiteStore((state) => state.selectedSite);
   const isCreating = useSiteStore((state) => state.isCreating);
 
-  // If we have site data, we want to render the home page components. If not, we show a welcome message. The home page is determined by the isHomePage flag in the pages array of the site data.
-  const siteInfo = selectedSite?.aiResponse || siteData;
-  const homePage = siteInfo?.pages?.find((p) => p.isHomePage);
+  const components = siteData?.components || selectedSite?.components || [];
 
   if (isCreating) {
     return (
@@ -27,11 +25,25 @@ export default function EditorCanvas({ device, siteData }) {
     );
   }
 
-  if (!homePage) {
+  if (!components.length) {
     return (
-      <div className="flex-1 flex items-center justify-center text-white/70 text-center">
-        <p className="text-3xl">Hello,<span className="text-[27px]">{user.name}</span><br /> <span>✨ Start building with AI
-        Describe your idea to generate a UI</span></p>
+      <div className="flex-1 flex items-center justify-center px-6 text-center">
+        <div className="max-w-3xl space-y-0.5">
+          <div className="inline-block px-4 py-1 rounded-full bg-yellow-400/10 border border-orange-400/20 text-orange-500 text-sm">
+            ✨ AI UI's Builder
+          </div>
+          <h1 className="text-5xl md:text-5xl font-bold text-white leading-tighter">
+            Welcome back,{" "}
+            <span className="text-orange-500">
+              {user.name}
+            </span>
+          </h1>
+          <p className="text-lg md:text-sm font-semibold text-white/60 leading-relaxed">
+            Describe your next big idea and generate
+            beautiful, responsive UI instantly with AI.
+          </p>
+
+        </div>
       </div>
     );
   }
@@ -62,7 +74,7 @@ export default function EditorCanvas({ device, siteData }) {
               minHeight: "100%",
               marginTop: isConstrained ? "32px" : "0",
             }}>
-            {homePage.components
+            {components
               .sort((a, b) => a.order - b.order)
               .map((comp, i) => (
                 <ComponentRenderer key={i} component={comp} />

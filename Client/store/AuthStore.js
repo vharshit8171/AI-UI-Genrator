@@ -9,7 +9,13 @@ const delay = (ms = 800) => new Promise((res) => setTimeout(res, ms));
 const extractErrorMessage = async (response, fallbackMessage) => {
   try {
     const data = await response.json();
-    return data?.message || data?.errors || fallbackMessage;
+    if (data?.message) {
+      return data.message;
+    }
+    if (Array.isArray(data?.errors) && data.errors.length > 0) {
+      return data.errors[0].message;
+    }
+    return fallbackMessage;
   } catch {
     return fallbackMessage;
   }
@@ -86,10 +92,11 @@ const useAuthStore = create(
           });
 
           if (!response.ok) {
-            set({ user: null,
-                isAuthenticated: false,
-                isInitialized: true,
-              },
+            set({
+              user: null,
+              isAuthenticated: false,
+              isInitialized: true,
+            },
               false,
               "auth/session/unauthorized"
             );
@@ -99,10 +106,11 @@ const useAuthStore = create(
           const data = await response.json();
           const user = mapUser(data.data);
 
-          set({user,
-              isAuthenticated: true,
-              isInitialized: true,
-            },
+          set({
+            user,
+            isAuthenticated: true,
+            isInitialized: true,
+          },
             false,
             "auth/session/success"
           );
@@ -112,10 +120,11 @@ const useAuthStore = create(
           const message = err?.message || "Failed to initialize session";
           _setError("session", message);
 
-          set({user: null,
-              isAuthenticated: false,
-              isInitialized: true,
-            },
+          set({
+            user: null,
+            isAuthenticated: false,
+            isInitialized: true,
+          },
             false,
             "auth/session/error"
           );
@@ -151,6 +160,8 @@ const useAuthStore = create(
             credentials: "include",
           });
 
+          // By default, fetch does not throw an error so we can catch it and extract the error message from the response body we have to check if the response is not ok and then throw an error with the extracted message.
+          
           if (!response.ok) {
             throw new Error(await extractErrorMessage(response, "Registration failed"));
           }
@@ -158,10 +169,11 @@ const useAuthStore = create(
           const data = await response.json();
           const user = mapUser(data.data);
 
-          set({user,
-              isAuthenticated: true,
-              isInitialized: true,
-            },
+          set({
+            user,
+            isAuthenticated: true,
+            isInitialized: true,
+          },
             false,
             "auth/register/success"
           );
@@ -194,7 +206,6 @@ const useAuthStore = create(
             body: JSON.stringify({ email, password }),
             credentials: "include",
           });
-
           if (!response.ok) {
             throw new Error(await extractErrorMessage(response, "Login failed"));
           }
@@ -202,10 +213,11 @@ const useAuthStore = create(
           const data = await response.json();
           const user = mapUser(data.data);
 
-          set({user,
-              isAuthenticated: true,
-              isInitialized: true,
-            },
+          set({
+            user,
+            isAuthenticated: true,
+            isInitialized: true,
+          },
             false,
             "auth/login/success"
           );
@@ -247,7 +259,7 @@ const useAuthStore = create(
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ idToken}),
+            body: JSON.stringify({ idToken }),
             credentials: "include",
           });
 
@@ -257,10 +269,11 @@ const useAuthStore = create(
 
           const data = await response.json();
           const user = mapUser(data.data);
-          set({user,
-              isAuthenticated: true,
-              isInitialized: true,
-            },
+          set({
+            user,
+            isAuthenticated: true,
+            isInitialized: true,
+          },
             false,
             "auth/socialLogin/success"
           );
@@ -311,10 +324,11 @@ const useAuthStore = create(
           }
           await signOut(auth);
 
-          set({user: null,
-              isAuthenticated: false,
-              isInitialized: true,
-            },
+          set({
+            user: null,
+            isAuthenticated: false,
+            isInitialized: true,
+          },
             false,
             "auth/logout/success"
           );
@@ -349,9 +363,10 @@ const useAuthStore = create(
           }
           await signOut(auth);
 
-          set({...initialState,
-              isInitialized: true,
-            },
+          set({
+            ...initialState,
+            isInitialized: true,
+          },
             false,
             "auth/deleteAccount/success"
           );
@@ -368,9 +383,10 @@ const useAuthStore = create(
       },
 
       reset: () =>
-        set({...initialState,
-            isInitialized: true,
-          },
+        set({
+          ...initialState,
+          isInitialized: true,
+        },
           false,
           "auth/reset"),
     }),

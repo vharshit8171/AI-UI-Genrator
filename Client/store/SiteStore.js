@@ -10,8 +10,6 @@ const initialState = {
   selectedModel: "openai/gpt-4o-mini",
   totalSites: 0,
 
-  pages: [],
-  currentPage: null,
   components: [],
 
   isLoading: false,
@@ -45,7 +43,7 @@ const fetchAPI = async (url, options = {}) => {
 };
 
 const useSiteStore = create(
-  devtools((set, get) => ({
+  devtools((set) => ({
     ...initialState,
 
     fetchSites: async () => {
@@ -58,7 +56,7 @@ const useSiteStore = create(
         });
 
         const data = await res.json();
-        const sites = data?.message || [];
+        const sites = data?.data || [];
 
         set({
           sites,
@@ -77,45 +75,18 @@ const useSiteStore = create(
       }
     },
 
-    setCurrentPageByPath: (path) => set((state) => {
-        if (!state.pages || state.pages.length === 0) return {};
-
-        // clean path (remove leading slash if any)
-        const cleanPath = path?.replace("/", "");
-        const page = state.pages.find((p) => p.path === cleanPath);
-
-        if (!page) {
-          console.warn("Page not found for path:", cleanPath);
-          return {};
-        }
-
-        return {
-          currentPage: page,
-          components: page.components || [],
-        };
-      }),
-
     fetchSiteById: async (siteId) => {
       set({ isFetching: true, fetchError: null });
-
       try {
-        const data = await fetchAPI(`${BASE_URL}/${siteId}`);
-
-        // Inside this api call, we fetch the site data along with its pages and components. So we doesnt need to make seprate api endpoints to fetch pages and components for preview and souce code feature.
-
-        const site = data?.site?.message?.website || data?.message?.website;
-        const pages = site.pages || [];
-        const currentPage = pages.find((p) => p.isHomePage) || pages[0];
-
-        console.log("fetched site", site)
-
-        // all the pages,components data of the fetchedwebsite by id are stored inside these 3 states i.e selectedSite, pages and components which are used in preview and source code feature.
-
+        const res = await fetch(`${BASE_URL}/${siteId}`,{
+          method:"GET",
+          credentials:"include"
+        });
+        const data = await res.json();
+        const site = data?.data;
         set({
           selectedSite: site,
-          pages,
-          currentPage,
-          components: currentPage?.components || [],
+          components: site?.components,
           isFetching: false,
         });
 
@@ -131,19 +102,22 @@ const useSiteStore = create(
     },
 
     createSite: async (prompt) => {
-      const aiModel = get().selectedModel;
+      // const aiModel = get().selectedModel;
       set({ isCreating: true, createError: null });
-      console.log("calling", aiModel, prompt)
       try {
         const res = await fetch(`${BASE_URL}/generate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, aiModel }),
+          body: JSON.stringify({ prompt }),
           credentials: "include",
         });
-        const data = await res.json();
-        console.log("result", data)
-        const newSite = data?.message;
+        const finalResult = await res.json();
+        const responseData = finalResult?.data;
+
+        const newSite = {
+          ...responseData.page,
+          components: responseData.components,
+        };
 
         set((state) => ({
           sites: [newSite, ...state.sites],
@@ -151,7 +125,6 @@ const useSiteStore = create(
           totalSites: state.totalSites + 1,
           isCreating: false,
         }));
-
         return { success: true, site: newSite };
       } catch (error) {
         set({
@@ -201,9 +174,11 @@ const useSiteStore = create(
       set({ isDeleting: true, deleteError: null });
 
       try {
-        await fetchAPI(`${BASE_URL}/id/${siteId}`, {
+        await fetch(`${BASE_URL}/id/${siteId}`, {
           method: "DELETE",
+          credentials: "include",
         });
+        
         set((state) => ({
           sites: state.sites.filter(
             (site) => site._id !== siteId && site.id !== siteId

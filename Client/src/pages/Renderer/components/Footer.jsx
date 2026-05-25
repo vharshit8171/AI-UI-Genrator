@@ -1,15 +1,10 @@
-export default function Footer({ logo, tagline, styles }) {
+export default function Footer({ copyright, styles }) {
     return (
-        <div
-            style={{
-                backgroundColor: styles?.backgroundColor,
-                color: styles?.textColor,
+        <div style={{backgroundColor: styles?.bg,
+                color: styles?.text,
                 padding: styles?.padding,
-            }}
-            className="text-center"
-        >
-            <h3 className="font-bold">{logo}</h3>
-            <p className="text-sm opacity-70">{tagline}</p>
+            }} className="text-center">
+            <p className="text-sm opacity-70">{copyright}</p>
         </div>
     );
 }

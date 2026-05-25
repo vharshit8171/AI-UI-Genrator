@@ -102,7 +102,7 @@ export default function SignupPage({ onNavigateToLogin }) {
 
           <h1 className="text-white font-black tracking-tight"
             style={{ fontFamily: "Syne, sans-serif", fontSize: "clamp(24px, 3vw, 32px)" }}>
-            Create your account
+            Create account
           </h1>
           <p className="text-white/50 text-sm ml-1.5 mb-5">
             Free forever. No credit card required.

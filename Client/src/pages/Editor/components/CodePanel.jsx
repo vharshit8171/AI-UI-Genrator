@@ -4,24 +4,113 @@ import useSiteStore from "../../../../store/SiteStore";
 const generateHTML = (site) => {
     if (!site) return "";
 
+    const components = [...(site.components || [])].sort(
+        (a, b) => a.order - b.order
+    );
+
     let html = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${site.title || "Untitled Site"}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${site.title}</title>
 </head>
-<body style="font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.5; color: #0a0a0a; background: #ffffff; padding: 2rem;">
+<body>
 `;
 
-    site.pages?.forEach((page) => {
-        html += `
-  <section style="margin-bottom: 2.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 1.5rem;">
-    <h1 style="font-size: 1.75rem; font-weight: 700; margin: 0 0 0.5rem 0;">${page.title || "Page"}</h1>
-    <p style="margin: 0; color: #374151;">${page.description || ""}</p>
-  </section>
+    components.forEach((component) => {
+        switch (component.type) {
+
+            case "navbar":
+                html += `
+<nav>
+  <h1>${component.props.logo}</h1>
+
+  <ul>
+    ${component.props.links
+                        ?.map(
+                            (link) =>
+                                `<li><a href="${link.path}">${link.label}</a></li>`
+                        )
+                        .join("")}
+  </ul>
+</nav>
 `;
+                break;
+
+            case "hero":
+                html += `
+<section>
+  <h1>${component.props.headline}</h1>
+
+  <p>${component.props.subheadline}</p>
+
+  <div>
+    ${component.props.buttons
+                        ?.map(
+                            (btn) =>
+                                `<button>${btn.label}</button>`
+                        )
+                        .join("")}
+  </div>
+</section>
+`;
+                break;
+
+            case "features":
+                html += `
+<section>
+  <h2>${component.props.title}</h2>
+
+  <div>
+    ${component.props.items
+                        ?.map(
+                            (item) => `
+<div>
+  <h3>${item.title}</h3>
+  <p>${item.description}</p>
+</div>
+`
+                        )
+                        .join("")}
+  </div>
+</section>
+`;
+                break;
+
+            case "testimonials":
+                html += `
+<section>
+  <h2>${component.props.title}</h2>
+
+  <div>
+    ${component.props.items
+                        ?.map(
+                            (item) => `
+<div>
+  <h4>${item.name}</h4>
+  <p>${item.review}</p>
+</div>
+`
+                        )
+                        .join("")}
+  </div>
+</section>
+`;
+                break;
+
+            case "footer":
+                html += `
+<footer>
+  <p>${component.props.copyright}</p>
+</footer>
+`;
+                break;
+
+            default:
+                break;
+        }
     });
 
     html += `
@@ -42,57 +131,55 @@ export default function CodePanel({ onClose }) {
         setIsVisible(false);
         setTimeout(() => {
             onClose();
-        }, 300);
+        }, 250);
     };
 
     return (
         <div className="fixed inset-0 z-50 flex">
-
-            <div onClick={handleClose}
-                className={`flex-1 bg-black/70 backdrop-blur-md transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"
-                    }`}
-                aria-label="Close source code panel"
+            <div
+                onClick={handleClose}
+                className={`flex-1 bg-black/70 backdrop-blur-sm transition-opacity duration-300
+          ${isVisible ? "opacity-100" : "opacity-0"}
+        `}
             />
 
-            <div className={`w-115 h-full bg-[#0a0a10] border-l border-white/10 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.7)] flex flex-col
-          transform transition-all duration-300 ease-out
-          ${isVisible ? "translate-x-0 scale-100" : "translate-x-full scale-95"}`}>
+            <div className={`w-120 h-full bg-[#0b0b10] border-l border-white/10
+          flex flex-col transition-all duration-300 ${isVisible ? "translate-x-0" : "translate-x-full"}
+        `}>
+                <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+                    <div>
+                        <h2 className="text-white font-semibold">Generated HTML</h2>
 
-                <div className="flex justify-between items-center px-5 py-4 border-b border-white/10">
-                    <h2 className="text-white text-md font-semibold tracking-wide uppercase">
-                        Source Code
-                    </h2>
+                        <p className="text-xs text-white/40 mt-1">{selectedSite?.title}</p>
+                    </div>
 
-                    <button onClick={handleClose}
-                        className="text-white/50 hover:text-white transition rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-white/40 cursor-pointer"
-                        aria-label="Close"
+                    <button
+                        onClick={handleClose}
+                        className="text-white/40 hover:text-white transition cursor-pointer"
                     >
-                        <span className="text-lg leading-none">✕</span>
+                        ✕
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-auto p-5">
-                    <div className="rounded-sm border border-white/10 bg-[#09090d] p-4 shadow-inner">
-                        <pre className="text-[#d1fae5] text-xs leading-relaxed whitespace-pre-wrap font-mono"
-                            style={{ textShadow: "0 0 6px rgba(52,211,153,0.18)", }}>
-                            {code || "<!-- No site selected -->"}
-                        </pre>
-                    </div>
-
-                    <div className="mt-3 text-white/40 text-xs">
-                        Generated HTML for <span className="text-white/70 font-medium">{selectedSite?.title || "selected site"}</span>.
-                    </div>
+                <div className="flex-1 overflow-auto px-5">
+                    <pre
+                        className="text-green-300 text-xs leading-6 whitespace-pre-wrap font-mono">
+                        {code}
+                    </pre>
                 </div>
 
-                <div className="px-5 py-3 border-t border-white/10 flex justify-end gap-2">
-                    <button onClick={() => navigator.clipboard.writeText(code)}
-                        className="px-3 py-1.5 text-xs font-medium rounded-md bg-white/10 hover:bg-white/20 text-white transition focus:outline-none focus:ring-2 focus:ring-white/40"
-                    >
-                        Copy
+                <div className="border-t border-white/10 p-4 flex justify-end gap-3">
+                    <button
+                        onClick={() => {
+                            navigator.clipboard.writeText(code);
+                        }}
+                        className="px-4 py-2 rounded-md bg-white/10 hover:bg-white/20 text-white text-sm transition cursor-pointer">
+                        Copy Code
                     </button>
-                    <button onClick={handleClose}
-                        className="px-3 py-1.5 text-xs font-medium rounded-md bg-white hover:bg-white/90 text-black transition focus:outline-none focus:ring-2 focus:ring-white/40"
-                    >
+
+                    <button
+                        onClick={handleClose}
+                        className="px-4 py-2 rounded-md bg-orange-500 hover:bg-orange-400 text-black font-medium text-sm transition cursor-pointer">
                         Done
                     </button>
                 </div>

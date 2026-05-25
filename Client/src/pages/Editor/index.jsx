@@ -14,30 +14,20 @@ export default function EditorPage() {
   const [isCodeOpen, setIsCodeOpen] = useState(false);
   const [selectedLayer, setSelectedLayer] = useState(null);
 
-  const sites = useSiteStore((state) => state.sites);
   const selectedSite = useSiteStore((state) => state.selectedSite);
   const fetchSiteById = useSiteStore((state) => state.fetchSiteById);
 
   useEffect(() => {
-    // If we're in edit mode, we need to fetch the site data if it's not already in the store
-    const fetchWebsiteData = async () => {
-      if (!isEditMode) return;
-      const existing = sites.find((s) => s._id === id);
+    if (!isEditMode) return;
+    fetchSiteById(id);
+  }, [id,fetchSiteById,isEditMode]);
 
-      if (!existing) {
-        await fetchSiteById(id);
-      }
-    }
-
-    fetchWebsiteData();
-  }, [id, sites, fetchSiteById, isEditMode]);
-console.log("Selected Site in Editor:", selectedSite);
   return (
     <div className="h-screen bg-[#0a0907] flex flex-col overflow-hidden">
 
       <EditorNavbar device={device}
         onDeviceChange={setDevice}
-        onPreview={() => window.open(`/preview/${selectedSite.id}/${selectedSite?.pages[0]?.path || ''}`, "_blank")}
+        onPreview={() => window.open(`/preview/${selectedSite._id}/${selectedSite?.path || ''}`, "_blank")}
         site={selectedSite}
         onToggleCode={() => setIsCodeOpen(prev => !prev)}
       />

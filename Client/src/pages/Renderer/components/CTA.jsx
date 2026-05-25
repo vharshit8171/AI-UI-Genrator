@@ -2,8 +2,8 @@ export default function CTA({ heading, buttons, styles }) {
     return (
         <div
             style={{
-                backgroundColor: styles?.backgroundColor,
-                color: styles?.textColor,
+                backgroundColor: styles?.bg,
+                color: styles?.text,
                 padding: styles?.padding,
                 textAlign: styles?.alignment,
             }}

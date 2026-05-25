@@ -33,6 +33,5 @@ export default function ComponentRenderer({ component }) {
             </div>
         );
     }
-
     return <Comp {...props} styles={styles} />;
 }

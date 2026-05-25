@@ -101,9 +101,9 @@ export default function AIChatPanel({ prompts }) {
       const index = updated.findIndex((msg) => msg.id === loadingId);
       updated[index] = {
         id: uuidv4(),
-        role: "assistant",
+        role: "ai",
         text: result.success
-          ? "✅ Website generated successfully!"
+          ? "✅ Page generated successfully!"
           : `❌ ${result.error}`,
         loading: false,
       };
@@ -120,21 +120,6 @@ export default function AIChatPanel({ prompts }) {
 
   return (
     <div className="flex flex-col h-full bg-[#0e0e10]">
-      <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/10">
-        <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-[#0a0907]">
-          <Bot size={20} />
-        </div>
-
-        <span className="text-white/70 text-sm font-semibold">
-          AI Assistant
-        </span>
-
-        <div className="ml-auto flex items-center gap-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-          <span className="text-green-400/60 text-[10px]">Online</span>
-        </div>
-      </div>
-
       <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-4">
 
         {allMessages.map((msg) => (
@@ -143,7 +128,7 @@ export default function AIChatPanel({ prompts }) {
         <div ref={bottomRef} />
       </div>
 
-      <div className="px-3 pb-3">
+      <div className="px-3 pb-0.5">
         <div className={`flex items-end gap-2 bg-white/5 border rounded-md px-3 py-2 ${focused ? "border-orange-400/50" : "border-white/10"
           }`}>
 
@@ -165,7 +150,7 @@ export default function AIChatPanel({ prompts }) {
           </button>
         </div>
 
-        <p className="text-white/30 text-[12px] mt-1.5 text-center">
+        <p className="text-white/30 text-[12px] mt-1 text-center">
           {user.name} | {user.email}
         </p>
       </div>

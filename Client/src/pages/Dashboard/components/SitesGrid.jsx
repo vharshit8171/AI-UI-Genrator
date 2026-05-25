@@ -9,7 +9,6 @@ export default function SitesGrid() {
   const fetchSites = useSiteStore((state) => state.fetchSites);
   const isFetching = useSiteStore((state) => state.isFetching);
   const navigate = useNavigate();
-
   useEffect(() => {
     fetchSites();
   }, [fetchSites]);
@@ -24,7 +23,11 @@ export default function SitesGrid() {
 
   return (
     <div>
-      <div className="flex items-center justify-end mb-5">
+      <div className="flex items-center justify-end gap-2.5 mb-2.5">
+        <button onClick={() => { navigate("/projects") }}
+          className="flex items-center gap-1 bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-4 py-2.5 rounded-md transition-all duration-200 cursor-pointer border-none hover:-translate-y-px">
+          My Sites
+        </button>
         <button onClick={() => { navigate("/editor") }}
           className="flex items-center gap-1 bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-4 py-2.5 rounded-md transition-all duration-200 cursor-pointer border-none hover:-translate-y-px">
           <span className="mb-1 text-2xl leading-none">+</span>
@@ -49,7 +52,7 @@ export default function SitesGrid() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {sites.map((site) => (
             <SiteCard key={site._id} site={site} />
           ))}

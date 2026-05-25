@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { generateWebsite,getPublishedWebsites,getWebsiteBySlug,deleteWebsite,getUserWebsites,updateWebsiteStatus } from "../controllers/website.controller.js";
+import { generateWebsite,getWebsiteById,deleteWebsite,getUserWebsites } from "../controllers/website.controller.js";
 
 const router = express.Router();
 
@@ -12,18 +12,18 @@ const router = express.Router();
 router.post("/generate", verifyJWT, generateWebsite);
 
 /**
- * @route GET /api/v1/website/community
- * @description Get all published websites
- * @access public
- */
-router.get("/community", getPublishedWebsites);
-
-/**
  * @route GET /api/v1/website/my
  * @description Get all websites of the current user
  * @access private
  */
 router.get("/my", verifyJWT, getUserWebsites);
+
+/**
+ * @route GET /api/v1/website/id
+ * @description Get website of the user by id
+ * @access private
+ */
+router.get("/:id", verifyJWT, getWebsiteById);
 
 /**
  * @route DELETE /api/v1/website/id/:websiteId
@@ -32,18 +32,5 @@ router.get("/my", verifyJWT, getUserWebsites);
  */
 router.delete("/id/:websiteId", verifyJWT, deleteWebsite);
 
-/**
- * @route GET /api/v1/website/:slug
- * @description Get a website by slug
- * @access public
- */
-router.get("/:slug", getWebsiteBySlug);
-
-/**
- * @route PATCH /api/v1/website/id/:websiteId/status
- * @description Update website status
- * @access private
- */
-router.patch("/id/:websiteId/status", verifyJWT, updateWebsiteStatus);
 
 export default router;

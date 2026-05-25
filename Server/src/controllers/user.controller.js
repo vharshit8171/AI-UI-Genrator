@@ -35,11 +35,9 @@ const sanitizeUser = (user) => ({
   email: user.email,
   contactNumber: user.contactNumber,
   avatar: user.avatar,
-  websites: user.websites,
-  deployedWebsites: user.deployedWebsites,
+  pages: user.pages,
   role: user.role,
   authProvider: user.authProvider,
-  providers: user.providers,
   credits: user.credits,
 });
 
@@ -49,14 +47,18 @@ const registerUser = async (req, res) => {
       ...req.body,
       avatar: req.file || null,
     });
-
     return res.status(201)
       .cookie("accessToken", accessToken, accessCookieOptions)
       .cookie("refreshToken", refreshToken, refreshCookieOptions)
       .json(new ApiResponse(201, "User registered successfully", sanitizeUser(user)));
   } catch (err) {
     if (err instanceof ApiError) {
-      return res.status(err.statusCode).json(err);
+      return res.status(err.statusCode).json({
+        success: err.success,
+        statusCode: err.statusCode,
+        message: err.message,
+        errors: err.errors,
+      });
     }
 
     if (err.code === 11000) {
@@ -65,7 +67,7 @@ const registerUser = async (req, res) => {
     }
 
     return res.status(500)
-    .json(new ApiError(500, "User registration failed"));
+      .json(new ApiError(500, "User registration failed"));
   }
 };
 
@@ -78,10 +80,23 @@ const loginUser = async (req, res) => {
       .cookie("accessToken", accessToken, accessCookieOptions)
       .cookie("refreshToken", refreshToken, refreshCookieOptions)
       .json(new ApiResponse(200, "User logged in successfully", sanitizeUser(user)));
-  } catch (error) {
-    return res
-      .status(error.statusCode || 500)
-      .json(new ApiError(error.statusCode || 500, error.message || "User login failed"));
+  } catch (err) {
+    if (err instanceof ApiError) {
+      return res.status(err.statusCode).json({
+        success: err.success,
+        statusCode: err.statusCode,
+        message: err.message,
+        errors: err.errors,
+      });
+    }
+
+    if (err.code === 11000) {
+      const field = Object.keys(err.keyValue)[0];
+      return res.status(400).json(new ApiError(400, `${field} already exists`));
+    }
+
+    return res.status(500)
+      .json(new ApiError(500, "User registration failed"));
   }
 };
 
@@ -93,7 +108,6 @@ const socialLoginUser = async (req, res) => {
       return res.status(400).json(new ApiError(400, "Social login token is required"));
     }
     const { user, accessToken, refreshToken } = await socialLoginService(idToken);
-
     return res.status(200)
       .cookie("accessToken", accessToken, accessCookieOptions)
       .cookie("refreshToken", refreshToken, refreshCookieOptions)
@@ -112,6 +126,15 @@ const getCurrentUser = async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, "Current user fetched successfully", sanitizeUser(user)));
   } catch (error) {
+    if(error instanceof ApiError) {
+      return res.status(error.statusCode).json({
+        success: error.success,
+        statusCode: error.statusCode,
+        message: error.message,
+        errors: error.errors,
+      });
+    }
+    
     return res
       .status(error.statusCode || 500)
       .json(new ApiError(error.statusCode || 500, error.message || "Failed to fetch current user"));

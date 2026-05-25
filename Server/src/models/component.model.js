@@ -11,40 +11,25 @@ const componentSchema = new mongoose.Schema(
 
     type: {
       type: String,
+      enum: ["navbar","hero","features","about","services","pricing","testimonials","stats","cta","faq","contact","gallery","footer","richtext",],
       required: true,
       trim: true,
-      lowercase: true,
     },
 
-    name: {
-      type: String,
-      trim: true,
-    },
-
-    props: {     // actual content.
-      type: mongoose.Schema.Types.Mixed,
+    props: {
+      type: Object,
       default: {},
     },
 
     styles: {
-      type: mongoose.Schema.Types.Mixed,
+      type: Object,
       default: {},
     },
 
     order: {
       type: Number,
-      default: 0,
-    },
-
-    isDeleted: {
-      type: Boolean,
-      default: false,
-      index: true,
-    },
-
-    version: {
-      type: Number,
-      default: 1,
+      required: true,
+      min:1
     },
   },
   {
@@ -52,9 +37,10 @@ const componentSchema = new mongoose.Schema(
   }
 );
 
-// Index for ordering components inside a page
-componentSchema.index({ page: 1, order: 1 });
+componentSchema.index(
+  { page: 1, order: 1 },
+  {unique: true}
+);
 
 const Component = mongoose.model("Component", componentSchema);
-
 export default Component;

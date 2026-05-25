@@ -1,20 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-const providerSchema = new mongoose.Schema({
-    type: {
-        type: String,
-        enum: ["google", "github"],
-        required: true,
-    },
-    providerId: {
-        type: String,
-        required: true,
-    },
-},
-    { _id: false }
-);
-
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -23,13 +9,6 @@ const userSchema = new mongoose.Schema({
         minlength: 2,
         maxlength: 50,
     },
-
-    websites: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Website",
-        },
-    ],
 
     email: {
         type: String,
@@ -59,7 +38,15 @@ const userSchema = new mongoose.Schema({
         default: "local",
     },
 
-    providers: [providerSchema], // allows multiple social accounts
+    // Helps us to delete the user from Firebase when user deletes their account from our app so next time when user register with same email it can register by any social login method or local method.
+
+    firebaseUid: {
+        type: String,
+        required: function () {
+            return this.authProvider !== "local";
+        },
+        unique: true,
+    },
 
     avatar: {
         url: {
@@ -73,19 +60,16 @@ const userSchema = new mongoose.Schema({
         }
     },
 
+    pages: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Page",
+        },
+    ],
+
     credits: {
         type: Number,
         default: 50,
-    },
-
-    deployedWebsites: {
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Website",
-            }
-        ],
-        default: []
     },
 
     role: {

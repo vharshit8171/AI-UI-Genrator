@@ -1,28 +1,33 @@
 import { z } from "zod";
 
 const componentSchema = z.object({
-    type: z.string().min(1),
-    name: z.string().optional(),
-    order: z.number().optional(),
-    props: z.object({}).catchall(z.any()).default({}),
-    styles: z.object({}).catchall(z.any()).default({}),
-});
-
-const pageSchema = z.object({
-    name: z.string().min(1),
-    path: z.string().min(1),
-    order: z.number(),
-    isHomePage: z.boolean(),
-    components: z.array(componentSchema).min(1),
-});
-
-const websiteSchema = z.object({
-    title: z.string().min(1),
-    description: z.string().optional(),
-    slug: z.string().min(1),
+    type: z.enum([
+        "navbar",
+        "hero",
+        "features",
+        "about",
+        "services",
+        "pricing",
+        "testimonials",
+        "stats",
+        "cta",
+        "faq",
+        "contact",
+        "gallery",
+        "footer",
+        "richtext",
+    ]),
+    order: z.number().min(1),
+    props: z.object({}).passthrough().default({}),
+    styles: z.object({
+        bg: z.string().optional(),
+        text: z.string().optional(),
+    }).default({}),
 });
 
 export const websiteGenerationSchema = z.object({
-    website: websiteSchema,
-    pages: z.array(pageSchema).min(1),
+    title: z.string().min(3).max(100),
+    description: z.string().max(300).default(""),
+    path: z.string().regex(/^\/([a-z0-9-]+)?$/).default("/"),
+    components: z.array(componentSchema).min(1),
 });

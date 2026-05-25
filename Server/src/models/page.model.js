@@ -1,58 +1,77 @@
 import mongoose from "mongoose";
 
-const pageSchema = new mongoose.Schema({
-    website: {
+const messageSchema = new mongoose.Schema(
+  {
+    role: {
+      type: String,
+      enum: ["user", "ai"],
+      required: true,
+    },
+
+    content: {
+      type: String,
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
+const pageSchema = new mongoose.Schema(
+  {
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Website",
+      ref: "User",
       required: true,
       index: true,
     },
 
-    name: {
+    title: {
       type: String,
       required: true,
       trim: true,
-      maxlength: 50,
+      minlength: 3,
+      maxlength: 100,
+    },
+
+    description: {
+      type: String,
+      trim: true,
+      default: "",
+      maxlength: 300,
     },
 
     path: {
       type: String,
+      match: /^\/([a-z0-9-]+)?$/,
       required: true,
-      trim: true,
       lowercase: true,
+      trim: true,
     },
 
-    order: {
+    prompts: {
+      type: [messageSchema],
+      default: [],
+    },
+
+    aiModel: {
+      type: String,
+      default: "",
+    },
+
+    version: {
       type: Number,
-      default: 0,
+      default: 1,
     },
-
-    // seo: {
-    //   title: {
-    //     type: String,
-    //     trim: true,
-    //     maxlength: 100,
-    //   },
-    //   description: {
-    //     type: String,
-    //     trim: true,
-    //     maxlength: 300,
-    //   },
-    // },
-
-    isHomePage: {
-      type: Boolean,
-      default: false,
-    }
   },
   {
     timestamps: true,
   }
 );
 
-// Ensure unique path per website
-pageSchema.index({ website: 1, path: 1 }, { unique: true });
+pageSchema.index(
+  { owner: 1, path: 1 },
+  { unique: true }
+);
 
 const Page = mongoose.model("Page", pageSchema);
-
 export default Page;

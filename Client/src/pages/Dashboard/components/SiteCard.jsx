@@ -33,6 +33,7 @@ const AI_MODELS = {
 
 export default function SiteCard({ site }) {
   const navigate = useNavigate();
+  
   const user = useAuthStore((state) => state.user);
   const deleteSite = useSiteStore((state) => state.deleteSite);
 
@@ -74,8 +75,7 @@ export default function SiteCard({ site }) {
 
   const handlePreview = (e) => {
     e.stopPropagation();
-    // Add preview logic here
-    toast.info("Preview coming soon!");
+    window.open(`/preview/${site._id}/${site?.path === "/" ? "home" : ''}`, "_blank");
   };
 
   return (

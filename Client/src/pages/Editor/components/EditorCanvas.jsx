@@ -51,8 +51,7 @@ export default function EditorCanvas({ device, siteData }) {
   return (
     <div className="flex-1 bg-linear-to-b from-[#161616] via-[#1b1b1d] to-[#141416] flex flex-col overflow-hidden">
 
-      <div className="flex items-center justify-center flex-1 overflow-hidden p-2">
-
+      <div className="flex items-center justify-center flex-1 overflow-hidden p-2 pointer-events-none select-none">
         <div className="relative h-full transition-all duration-300 rounded-md overflow-auto bg-white border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
           style={{
             width: canvasWidth,

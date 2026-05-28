@@ -4,39 +4,54 @@ import useSiteStore from "../../../../store/SiteStore.js";
 import ComponentRenderer from "../../Renderer/ComponentRenderer.jsx";
 
 export default function PreviewPage() {
-    const { id, page } = useParams();
+  const { id } = useParams();
 
-    const pages = useSiteStore((s) => s.pages);
-    const components = useSiteStore((s) => s.components);
-    const setCurrentPageByPath = useSiteStore((s) => s.setCurrentPageByPath);
-    const fetchSiteById = useSiteStore((s) => s.fetchSiteById);
+  const selectedSite = useSiteStore((state) => state.selectedSite);
+  const fetchSiteById = useSiteStore((state) => state.fetchSiteById);
+  const isFetching = useSiteStore((state) => state.isFetching);
 
-    // This api call is again used to fetch the site data becuase on window.open the whole app is load as a fresh i.e why we need to fetch the site data again.
+  useEffect(() => {
+    if (id) {
+      fetchSiteById(id);
+    }
+  }, [id, fetchSiteById]);
 
-    useEffect(() => {
-        fetchSiteById(id);
-    }, [id, fetchSiteById]);
+  const components = [...(selectedSite?.components || [])].sort(
+    (a, b) => a.order - b.order
+  );
 
-    // This useeffect is run when the user open the preview page with a specific page path like /preview/12345/about, so we need to set the current page in the store based on the page path in the url so that correct page data and its components are rendered in the preview.
-
-    useEffect(() => {
-        if (pages.length > 0 && page) {
-            const matchedPage = pages.find((p) => p.path === page);
-
-            if (matchedPage) {
-                setCurrentPageByPath(page);
-            }
-        }
-    }, [page, pages, setCurrentPageByPath]);
-
+  if (isFetching) {
     return (
-        <div className="min-h-screen bg-white">
-            {components
-                .slice()
-                .sort((a, b) => a.order - b.order)
-                .map((comp) => (
-                    <ComponentRenderer key={comp._id} component={comp} />
-                ))}
+      <div className="min-h-screen flex items-center justify-center bg-[#0f0f10] text-white">
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 border-2 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto" />
+
+          <p className="text-white/70 text-sm">
+            Loading preview...
+          </p>
         </div>
+      </div>
     );
+  }
+
+  if (!components.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-gray-500">
+          No preview available
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white overflow-x-hidden">
+      {components.map((component, index) => (
+        <ComponentRenderer
+          key={component._id || index}
+          component={component}
+        />
+      ))}
+    </div>
+  );
 }

@@ -8,7 +8,12 @@ export default function SitesGrid() {
   const sites = useSiteStore((state) => state.sites);
   const fetchSites = useSiteStore((state) => state.fetchSites);
   const isFetching = useSiteStore((state) => state.isFetching);
+  
+  const latestSites = [...sites]
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  .slice(0, 3);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchSites();
   }, [fetchSites]);
@@ -26,16 +31,16 @@ export default function SitesGrid() {
       <div className="flex items-center justify-end gap-2.5 mb-2.5">
         <button onClick={() => { navigate("/projects") }}
           className="flex items-center gap-1 bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-4 py-2.5 rounded-md transition-all duration-200 cursor-pointer border-none hover:-translate-y-px">
-          My Sites
+          View All
         </button>
         <button onClick={() => { navigate("/editor") }}
           className="flex items-center gap-1 bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-4 py-2.5 rounded-md transition-all duration-200 cursor-pointer border-none hover:-translate-y-px">
           <span className="mb-1 text-2xl leading-none">+</span>
-          New Site
+          New Page
         </button>
       </div>
 
-      {sites.length === 0 ? (
+      {latestSites.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="w-14 h-14 rounded-md bg-orange-500/10 border border-orange-500/20 flex items-center justify-center mb-2">
             <span className="text-2xl">✨</span>
@@ -53,7 +58,7 @@ export default function SitesGrid() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sites.map((site) => (
+          {latestSites.map((site) => (
             <SiteCard key={site._id} site={site} />
           ))}
         </div>

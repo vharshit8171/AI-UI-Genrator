@@ -4,15 +4,13 @@ import Features from "./components/Features.jsx";
 import CTA from "./components/CTA.jsx";
 import Footer from "./components/Footer.jsx";
 import Testimonials from "./components/Testimonials.jsx";
-
+  
 const componentMap = {
     navbar: Navbar,
     hero: Hero,
     features: Features,
     cta: CTA,
     footer: Footer,
-
-    testimonial: Testimonials,
     testimonials: Testimonials,
 };
 

@@ -7,7 +7,7 @@ const initialState = {
   sites: [],
   globalPrompt: "",
   selectedSite: null,
-  selectedModel: "openai/gpt-4o-mini",
+  selectedModel: "llama-3.3-70b-versatile",
   totalSites: 0,
 
   components: [],
@@ -15,36 +15,52 @@ const initialState = {
   isLoading: false,
   isFetching: false,
   isCreating: false,
-  isUpdating: false,
   isDeleting: false,
 
   error: null,
   fetchError: null,
   createError: null,
-  updateError: null,
   deleteError: null,
 };
 
-const fetchAPI = async (url, options = {}) => {
-  const res = await fetch(url, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-    ...options,
-  });
-
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data?.message || "Something went wrong");
-  }
-  return data;
-};
-
 const useSiteStore = create(
-  devtools((set) => ({
+  devtools((set, get) => ({
     ...initialState,
+
+    createSite: async (prompt) => {
+      const aiModel = get().selectedModel;
+      set({ isCreating: true, createError: null });
+      try {
+        const res = await fetch(`${BASE_URL}/generate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt, aiModel }),
+          credentials: "include",
+        });
+        const finalResult = await res.json();
+        const responseData = finalResult?.data;
+
+        const newSite = {
+          ...responseData.page,
+          components: responseData.components,
+        };
+
+        set((state) => ({
+          sites: [newSite, ...state.sites],
+          selectedSite: newSite,
+          totalSites: state.totalSites + 1,
+          isCreating: false,
+        }));
+        return { success: true, site: newSite };
+      } catch (error) {
+        set({
+          createError: error.message,
+          isCreating: false,
+        });
+
+        return { success: false, error: error.message };
+      }
+    },
 
     fetchSites: async () => {
       set({ isFetching: true, fetchError: null });
@@ -78,9 +94,9 @@ const useSiteStore = create(
     fetchSiteById: async (siteId) => {
       set({ isFetching: true, fetchError: null });
       try {
-        const res = await fetch(`${BASE_URL}/${siteId}`,{
-          method:"GET",
-          credentials:"include"
+        const res = await fetch(`${BASE_URL}/${siteId}`, {
+          method: "GET",
+          credentials: "include"
         });
         const data = await res.json();
         const site = data?.data;
@@ -100,75 +116,38 @@ const useSiteStore = create(
         return null;
       }
     },
+    //   set({ isUpdating: true, updateError: null });
 
-    createSite: async (prompt) => {
-      // const aiModel = get().selectedModel;
-      set({ isCreating: true, createError: null });
-      try {
-        const res = await fetch(`${BASE_URL}/generate`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt }),
-          credentials: "include",
-        });
-        const finalResult = await res.json();
-        const responseData = finalResult?.data;
+    //   try {
+    //     const data = await fetchAPI(`${BASE_URL}/${siteId}`, {
+    //       method: "PUT",
+    //       body: JSON.stringify(updatedData),
+    //     });
 
-        const newSite = {
-          ...responseData.page,
-          components: responseData.components,
-        };
+    //     const updatedSite = data?.site ?? data;
 
-        set((state) => ({
-          sites: [newSite, ...state.sites],
-          selectedSite: newSite,
-          totalSites: state.totalSites + 1,
-          isCreating: false,
-        }));
-        return { success: true, site: newSite };
-      } catch (error) {
-        set({
-          createError: error.message,
-          isCreating: false,
-        });
+    //     set((state) => ({
+    //       sites: state.sites.map((site) =>
+    //         site._id === siteId || site.id === siteId ? updatedSite : site
+    //       ),
+    //       selectedSite:
+    //         state.selectedSite?._id === siteId ||
+    //           state.selectedSite?.id === siteId
+    //           ? updatedSite
+    //           : state.selectedSite,
+    //       isUpdating: false,
+    //     }));
 
-        return { success: false, error: error.message };
-      }
-    },
+    //     return { success: true, site: updatedSite };
+    //   } catch (error) {
+    //     set({
+    //       updateError: error.message,
+    //       isUpdating: false,
+    //     });
 
-    updateSite: async (siteId, updatedData) => {
-      set({ isUpdating: true, updateError: null });
-
-      try {
-        const data = await fetchAPI(`${BASE_URL}/${siteId}`, {
-          method: "PUT",
-          body: JSON.stringify(updatedData),
-        });
-
-        const updatedSite = data?.site ?? data;
-
-        set((state) => ({
-          sites: state.sites.map((site) =>
-            site._id === siteId || site.id === siteId ? updatedSite : site
-          ),
-          selectedSite:
-            state.selectedSite?._id === siteId ||
-              state.selectedSite?.id === siteId
-              ? updatedSite
-              : state.selectedSite,
-          isUpdating: false,
-        }));
-
-        return { success: true, site: updatedSite };
-      } catch (error) {
-        set({
-          updateError: error.message,
-          isUpdating: false,
-        });
-
-        return { success: false, error: error.message };
-      }
-    },
+    //     return { success: false, error: error.message };
+    //   }
+    // },
 
     deleteSite: async (siteId) => {
       set({ isDeleting: true, deleteError: null });
@@ -178,7 +157,7 @@ const useSiteStore = create(
           method: "DELETE",
           credentials: "include",
         });
-        
+
         set((state) => ({
           sites: state.sites.filter(
             (site) => site._id !== siteId && site.id !== siteId
@@ -214,7 +193,6 @@ const useSiteStore = create(
         error: null,
         fetchError: null,
         createError: null,
-        updateError: null,
         deleteError: null,
       }),
 

@@ -22,7 +22,7 @@ export const SITES = [
 export const NAV_ITEMS = [
   { icon: <Home />, label: "Home", route: "/" },
   { icon: <LayoutDashboard />, label: "Editor", route: "/editor" },
-  { icon: <FolderKanban />, label: "All Pages", route: "/projects" },
+  { icon: <FolderKanban />, label: "View Profile", route: "/profile" },
   { icon: < Sparkles  />, label: "Features", route: "/feature" },
   { icon: <CreditCard />, label: "Pricing", route: "/pricing" }
 ];

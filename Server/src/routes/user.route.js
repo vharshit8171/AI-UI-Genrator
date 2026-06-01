@@ -8,6 +8,7 @@ import {
   loginUser,
   socialLoginUser,
   getCurrentUser,
+  refreshAccessToken,
   logoutUser,
   deleteUserAccount,
 } from "../controllers/user.controller.js";
@@ -51,6 +52,13 @@ router.route("/me").get(
   verifyJWT,
   getCurrentUser
 );
+
+/**
+ * @route POST /api/v1/user/refresh-token
+ * @description Refresh access token
+ * @access private
+ */
+router.route("/refresh-token").post(refreshAccessToken);
 
 /**
  * @route POST /api/v1/user/logout

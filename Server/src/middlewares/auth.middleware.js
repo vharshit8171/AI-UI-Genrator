@@ -8,9 +8,10 @@ const verifyJWT = async (req, res, next) => {
     req.cookies?.accessToken || req.headers.authorization?.replace("Bearer ", "");
 
   if (!initialToken) {
-    return res.status(401).json(new ApiError(401, "Access token is missing"));
+    return res
+    .status(401)
+    .json(new ApiError(401, "Access token is missing", ["Access token is missing"]));
   }
-
   const isTokenBlacklisted = await tokenBlacklistModel.findOne({ token: initialToken });
   if (isTokenBlacklisted) {
     return res.status(401).json(new ApiError(401, "Token is invalid"));

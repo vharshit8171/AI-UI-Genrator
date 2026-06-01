@@ -31,14 +31,14 @@ export default function AppNavbar() {
     setOpen(false);
     await logout();
     navigate("/auth");
-    toast.success("Logged out successfully!");
+    toast.success("SignOut successfully!");
   };
 
   const handleDeleteAccount = async () => {
     setOpen(false);
     await deleteAccount();
     navigate("/auth");
-    toast.success("Account deleted successfully!");
+    toast.success("Account Deleted!");
   };
 
   return (

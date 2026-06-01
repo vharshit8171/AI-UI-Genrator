@@ -7,6 +7,7 @@ import PublicRoute from "./PublicRoute.jsx";
 import FeaturesPage from "./pages/Features";
 import DashboardPage from "./pages/Dashboard";
 import LandingPage from "./pages/LandingPage";
+import Profile from "./pages/Profile";
 import { ToastContainer } from "react-toastify";
 import useAuthStore from "../store/AuthStore.js";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,6 +34,7 @@ function AppContent() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/profile" element={<Profile />} />
           <Route path="/editor" element={<EditorPage />} />
           <Route path="/editor/:id" element={<EditorPage />} />
           <Route path="/pricing" element={<PricingPage />} />

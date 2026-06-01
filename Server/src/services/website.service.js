@@ -49,6 +49,7 @@ export const getUserWebsitesService = async (userId) => {
     return pages;
 };
 
+
 export const getWebsiteByIdService = async (id, userId) => {
     const page = await Page.findOne({
         _id: id,
@@ -60,9 +61,9 @@ export const getWebsiteByIdService = async (id, userId) => {
     }
 
     const components = await Component
-    .find({ page: id })
-    .sort({order:1})
-    .lean();
+        .find({ page: id })
+        .sort({ order: 1 })
+        .lean();
 
     const finalResult = {
         ...page,
@@ -72,16 +73,16 @@ export const getWebsiteByIdService = async (id, userId) => {
 };
 
 
-export const deletePageService = async (pageId,userId) => {
-  const page = await Page.findOne({_id: pageId,owner: userId});
-  if (!page) {
-    throw new ApiError(404,"Page not found or unauthorized");
-  }
+export const deletePageService = async (pageId, userId) => {
+    const page = await Page.findOne({ _id: pageId, owner: userId });
+    if (!page) {
+        throw new ApiError(404, "Page not found or unauthorized");
+    }
 
-  await Component.deleteMany({page: pageId,});
-  await Page.findByIdAndDelete(pageId);
+    await Component.deleteMany({ page: pageId, });
+    await Page.findByIdAndDelete(pageId);
 
-  await User.findByIdAndUpdate(userId,{$pull: {pages: pageId,}}
-  );
-  return true;
+    await User.findByIdAndUpdate(userId, { $pull: { pages: pageId, } }
+    );
+    return true;
 };

@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { generateWebsite,getWebsiteById,deleteWebsite,getUserWebsites } from "../controllers/website.controller.js";
+import { generateWebsite,getWebsiteById,deletePage,getUserWebsites } from "../controllers/website.controller.js";
 
 const router = express.Router();
 
@@ -26,11 +26,11 @@ router.get("/my", verifyJWT, getUserWebsites);
 router.get("/:id", verifyJWT, getWebsiteById);
 
 /**
- * @route DELETE /api/v1/website/id/:websiteId
- * @description Delete a website by ID
+ * @route DELETE /api/v1/website/id/:pageId
+ * @description Delete a page by ID
  * @access private
  */
-router.delete("/id/:websiteId", verifyJWT, deleteWebsite);
+router.delete("/id/:pageId", verifyJWT, deletePage);
 
 
 export default router;

@@ -126,7 +126,7 @@ const getCurrentUser = async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, "Current user fetched successfully", sanitizeUser(user)));
   } catch (error) {
-    if(error instanceof ApiError) {
+    if (error instanceof ApiError) {
       return res.status(error.statusCode).json({
         success: error.success,
         statusCode: error.statusCode,
@@ -134,10 +134,41 @@ const getCurrentUser = async (req, res) => {
         errors: error.errors,
       });
     }
-    
+
     return res
       .status(error.statusCode || 500)
       .json(new ApiError(error.statusCode || 500, error.message || "Failed to fetch current user"));
+  }
+};
+
+const refreshAccessToken = async (req, res) => {
+  try {
+    const incomingRefreshToken = req.cookies.refreshToken;
+
+    if (!incomingRefreshToken) {
+      throw new ApiError(401, "Refresh token missing", ["Refresh token missing"]);
+    }
+
+    const decoded = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findById(decoded._id);
+
+    if (!user) {
+      throw new ApiError(401, "User not found", ["User not found"]);
+    }
+
+    if (user.refreshToken !== incomingRefreshToken) {
+      throw new ApiError(401, "Invalid refresh token", ["Invalid refresh token"]);
+    }
+
+    const newAccessToken = signAccessToken(user);
+    return res
+      .cookie("accessToken",newAccessToken,accessCookieOptions)
+      .status(200)
+      .json({success: true});
+  } catch (error) {
+    return res
+    .status(401)
+    .json(new ApiError(401, "Invalid or expired refresh token", ["Invalid or expired refresh token"]));
   }
 };
 
@@ -197,6 +228,7 @@ export {
   loginUser,
   socialLoginUser,
   getCurrentUser,
+  refreshAccessToken,
   logoutUser,
   deleteUserAccount,
 };

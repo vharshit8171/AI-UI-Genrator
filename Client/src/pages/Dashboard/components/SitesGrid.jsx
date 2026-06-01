@@ -29,9 +29,9 @@ export default function SitesGrid() {
   return (
     <div>
       <div className="flex items-center justify-end gap-2.5 mb-2.5">
-        <button onClick={() => { navigate("/projects") }}
+        <button onClick={() => { navigate("/profile") }}
           className="flex items-center gap-1 bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-4 py-2.5 rounded-md transition-all duration-200 cursor-pointer border-none hover:-translate-y-px">
-          View All
+          View Profile
         </button>
         <button onClick={() => { navigate("/editor") }}
           className="flex items-center gap-1 bg-orange-500 hover:bg-orange-400 text-[#0a0907] text-sm font-bold px-4 py-2.5 rounded-md transition-all duration-200 cursor-pointer border-none hover:-translate-y-px">

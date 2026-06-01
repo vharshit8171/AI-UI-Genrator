@@ -1,25 +1,10 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import axiosInstance from "../src/api/axios.js";
 import { signInWithPopup, fetchSignInMethodsForEmail, signOut } from "firebase/auth";
 import { auth, googleProvider, githubProvider } from "../src/config/firebase.js";
 
-const BASE_URL = "http://localhost:3000/api/v1/user";
 const delay = (ms = 800) => new Promise((res) => setTimeout(res, ms));
-
-const extractErrorMessage = async (response, fallbackMessage) => {
-  try {
-    const data = await response.json();
-    if (data?.message) {
-      return data.message;
-    }
-    if (Array.isArray(data?.errors) && data.errors.length > 0) {
-      return data.errors[0].message;
-    }
-    return fallbackMessage;
-  } catch {
-    return fallbackMessage;
-  }
-};
 
 const mapUser = (user) => ({
   _id: user._id,
@@ -86,26 +71,8 @@ const useAuthStore = create(
         _setError("session", null);
 
         try {
-          const response = await fetch(`${BASE_URL}/me`, {
-            method: "GET",
-            credentials: "include",
-          });
-
-          if (!response.ok) {
-            set({
-              user: null,
-              isAuthenticated: false,
-              isInitialized: true,
-            },
-              false,
-              "auth/session/unauthorized"
-            );
-            return { success: false };
-          }
-
-          const data = await response.json();
-          const user = mapUser(data.data);
-
+          const response = await axiosInstance.get("/user/me");
+          const user = mapUser(response.data.data);
           set({
             user,
             isAuthenticated: true,
@@ -117,7 +84,7 @@ const useAuthStore = create(
 
           return { success: true, user };
         } catch (err) {
-          const message = err?.message || "Failed to initialize session";
+          const message = err?.response?.data?.message || "Failed to initialize session";
           _setError("session", message);
 
           set({
@@ -154,21 +121,8 @@ const useAuthStore = create(
           if (payload.avatar) {
             formData.append("avatar", payload.avatar);
           }
-          const response = await fetch(`${BASE_URL}/register`, {
-            method: "POST",
-            body: formData,
-            credentials: "include",
-          });
-
-          // By default, fetch does not throw an error so we can catch it and extract the error message from the response body we have to check if the response is not ok and then throw an error with the extracted message.
-          
-          if (!response.ok) {
-            throw new Error(await extractErrorMessage(response, "Registration failed"));
-          }
-
-          const data = await response.json();
-          const user = mapUser(data.data);
-
+          const response = await axiosInstance.post("/user/register",formData)
+          const user = mapUser(response.data.data);
           set({
             user,
             isAuthenticated: true,
@@ -181,7 +135,7 @@ const useAuthStore = create(
           _setSuccess("register", true);
           return { success: true, user };
         } catch (err) {
-          const message = err?.message || "Registration failed. Please try again.";
+          const message = err?.response?.data?.message || "Registration failed. Please try again.";
           _setError("register", message);
           return { success: false, error: message };
         } finally {
@@ -198,20 +152,8 @@ const useAuthStore = create(
 
         try {
           await delay(800);
-          const response = await fetch(`${BASE_URL}/login`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-            credentials: "include",
-          });
-          if (!response.ok) {
-            throw new Error(await extractErrorMessage(response, "Login failed"));
-          }
-
-          const data = await response.json();
-          const user = mapUser(data.data);
+          const response = await axiosInstance.post("/user/login",{email,password});
+          const user = mapUser(response.data.data);
 
           set({
             user,
@@ -225,7 +167,7 @@ const useAuthStore = create(
           _setSuccess("login", true);
           return { success: true, user };
         } catch (err) {
-          const message = err?.message || "Login failed. Please try again.";
+          const message = err?.response?.data?.message || "Login failed. Please try again.";
           _setError("login", message);
           return { success: false, error: message };
         } finally {
@@ -254,21 +196,8 @@ const useAuthStore = create(
           const result = await signInWithPopup(auth, provider);
           const idToken = await result.user.getIdToken(true);
 
-          const response = await fetch(`${BASE_URL}/social-login`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ idToken }),
-            credentials: "include",
-          });
-
-          if (!response.ok) {
-            throw new Error(await extractErrorMessage(response, "Social login failed"));
-          }
-
-          const data = await response.json();
-          const user = mapUser(data.data);
+          const response = await axiosInstance.post("/user/social-login",{idToken});
+          const user = mapUser(response.data.data);
           set({
             user,
             isAuthenticated: true,
@@ -282,7 +211,7 @@ const useAuthStore = create(
           return { success: true, user };
         } catch (err) {
           await signOut(auth);
-          let message = err?.message || "Login failed. Please try again.";
+          let message = err?.response?.data?.message || "Login failed. Please try again.";
 
           // Allowing user to login only from the provider they originally signed up with
           if (err?.code === "auth/account-exists-with-different-credential") {
@@ -312,18 +241,10 @@ const useAuthStore = create(
         _setError("logout", null);
         _setSuccess("logout", false);
 
+        await delay(400);
+        await axiosInstance.post("/user/logout");
         try {
-          await delay(400);
-          const response = await fetch(`${BASE_URL}/logout`, {
-            method: "POST",
-            credentials: "include",
-          });
-
-          if (!response.ok) {
-            throw new Error(await extractErrorMessage(response, "Logout failed"));
-          }
           await signOut(auth);
-
           set({
             user: null,
             isAuthenticated: false,
@@ -336,7 +257,7 @@ const useAuthStore = create(
           _setSuccess("logout", true);
           return { success: true };
         } catch (err) {
-          const message = err?.message || "Logout failed.";
+          const message = err?.response?.data?.message || "Logout failed.";
           _setError("logout", message);
           return { success: false, error: message };
         } finally {
@@ -353,14 +274,7 @@ const useAuthStore = create(
 
         try {
           await delay(1000);
-          const response = await fetch(`${BASE_URL}/delete-account`, {
-            method: "DELETE",
-            credentials: "include",
-          });
-
-          if (!response.ok) {
-            throw new Error(await extractErrorMessage(response, "Account deletion failed"));
-          }
+          await axiosInstance.delete("/user/delete-account");
           await signOut(auth);
 
           set({
@@ -374,7 +288,7 @@ const useAuthStore = create(
           _setSuccess("deleteAccount", true);
           return { success: true };
         } catch (err) {
-          const message = err?.message || "Account deletion failed.";
+          const message = err?.response?.data?.message || "Account deletion failed.";
           _setError("deleteAccount", message);
           return { success: false, error: message };
         } finally {

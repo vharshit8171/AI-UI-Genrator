@@ -1,11 +1,11 @@
 import User from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-import { generateWebsiteService, getUserWebsitesService, getWebsiteByIdService, deleteWebsiteService } from "../services/website.service.js";
+import { generateWebsiteService, getUserWebsitesService, getWebsiteByIdService, deletePageService } from "../services/website.service.js";
 
 export const generateWebsite = async (req, res) => {
     try {
-        const { prompt } = req.body;
+        const { prompt,aiModel } = req.body;
         if (!prompt || typeof prompt !== 'string') {
             throw new ApiError(400, "prompt must be a non-empty string", ["prompt must be a non-empty string"])
         }
@@ -13,9 +13,8 @@ export const generateWebsite = async (req, res) => {
         const result = await generateWebsiteService({
             userId: req.user._id,
             prompt,
-            aiModel: "llama-3.3-70b-versatile",
+            aiModel,
         });
-        console.log("sending result", result)
 
         const updatedUser = await User.findByIdAndUpdate(req.user._id, {
             $push: { pages: result.page._id },
@@ -62,21 +61,21 @@ export const getWebsiteById = async (req, res) => {
     }
 };
 
-export const deleteWebsite = async (req, res) => {
+export const deletePage = async (req, res) => {
     try {
-        const { websiteId } = req.params;
+        const { pageId } = req.params;
         const userId = req.user._id;
 
-        await deleteWebsiteService(websiteId, userId);
+        await deletePageService(pageId, userId);
 
         return res.status(200)
-            .json(new ApiResponse(200, null, "Website deleted successfully"));
+            .json(new ApiResponse(200, null, "Page deleted successfully"));
     } catch (error) {
         return res
             .status(error.statusCode || 500)
             .json({
                 success: false,
-                message: error.message || "An error occurred while deleting the website",
+                message: error.message || "An error occurred while deleting the page",
             })
     }
 };

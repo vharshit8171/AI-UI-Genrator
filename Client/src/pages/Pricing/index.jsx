@@ -1,5 +1,3 @@
-import { useState } from "react";
-import BillingToggle from "./components/BillingToggle";
 import PlanCard from "./components/PlanCard";
 import FAQItem from "./components/FAQItem";
 import {useNavigate} from "react-router-dom";
@@ -8,9 +6,9 @@ import ParticleCanvas from "../LandingPage/components/ParticleCanvas.jsx";
 import { PLANS, FAQS, LOGOS } from "../../constants/pricingData.jsx";
 
 
-function HeroSection({ yearly, onToggle }) {
+function HeroSection() {
   return (
-    <section className="relative z-10 pt-22 pb-14 px-8 text-center">
+    <section className="relative z-10 pt-22 pb-10 px-8 text-center">
       <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/25 rounded-full px-4 py-1 mb-2">
         <span className="w-1.5 h-1.5 rounded-full bg-orange-500" style={{ boxShadow: "0 0 8px #f97316" }} />
         <span className="text-[12px] text-orange-400 font-semibold tracking-widest uppercase">Simple Pricing</span>
@@ -26,20 +24,16 @@ function HeroSection({ yearly, onToggle }) {
       <p className="text-white/40 text-md max-w-xl mx-auto mb-3">
         No hidden fees. No surprises. Start free and scale when you're ready.
       </p>
-
-      <div className="flex justify-center">
-        <BillingToggle yearly={yearly} onToggle={onToggle} />
-      </div>
     </section>
   );
 }
 
-function PlansSection({ yearly }) {
+function PlansSection() {
   return (
     <section className="relative z-10 px-8 pb-18">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5">
         {PLANS.map((plan) => (
-          <PlanCard key={plan.id} plan={plan} yearly={yearly} />
+          <PlanCard key={plan.id} plan={plan} />
         ))}
       </div>
     </section>
@@ -51,7 +45,7 @@ function LogosSection() {
     <section className="relative z-10 px-8 py-8 border-y border-white/8">
       <div className="max-w-4xl mx-auto text-center">
         <p className="text-white/35 text-sm uppercase tracking-widest mb-8">Trusted by teams at</p>
-        <div className="flex items-center justify-center gap-10 flex-wrap">
+        <div className="flex items-center justify-center gap-16 flex-wrap">
           {LOGOS.map((logo) => (
             <span key={logo}
               className="text-white/20 text-lg font-bold tracking-wide hover:text-white/40 transition-colors"
@@ -69,7 +63,7 @@ function LogosSection() {
 function FAQSection() {
   return (
     <section className="relative z-10 px-8 py-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         <div className="text-center mb-8">
           <p className="text-[20px] text-orange-500 font-semibold tracking-[0.12em] uppercase mb-3">FAQ</p>
           <h2 className="text-white font-black tracking-tight"
@@ -77,7 +71,7 @@ function FAQSection() {
             Questions answered
           </h2>
         </div>
-        <div className="flex flex-col gap-3.5">
+        <div className="flex flex-col gap-4">
           {FAQS.map((faq) => (
             <FAQItem key={faq.q} faq={faq} />
           ))}
@@ -143,7 +137,6 @@ function Footer() {
 }
 
 export default function PricingPage() {
-  const [yearly, setYearly] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0a0907]">
@@ -151,8 +144,8 @@ export default function PricingPage() {
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[70vw] h-[50vh] rounded-full pointer-events-none z-0"
         style={{ background: "radial-gradient(ellipse, rgba(249,115,22,0.05) 0%, transparent 70%)" }}
       />
-      <HeroSection yearly={yearly} onToggle={() => setYearly(!yearly)} />
-      <PlansSection yearly={yearly} />
+      <HeroSection />
+      <PlansSection />
       <LogosSection />
       <FAQSection />
       <CTASection />

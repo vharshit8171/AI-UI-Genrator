@@ -24,13 +24,13 @@ export default function Sidebar() {
         </span>
       </div>
 
-      <div className={`overflow-hidden transition-all duration-300 mb-14 ${expanded ? "opacity-100 max-h-40 w-[85%] mb-3" : "opacity-0 max-h-0 w-0 mb-0"} border border-orange-500/20 bg-orange-500/8 p-3 rounded-md`}>
+      <div className={`overflow-hidden transition-all duration-300 mb-14 ${expanded ? "opacity-100 max-h-40 w-[85%] mb-3" : "opacity-0 max-h-0 w-0 mb-0"} border border-orange-500/20 bg-orange-500/8 p-2 rounded-md`}>
         <p className="text-xs text-white/40 mb-1">Current Plan</p>
         <div className="flex items-center justify-between">
           <span className="text-sm text-orange-400 font-semibold">
-            {user.role} Plan
+            {user.role}
           </span>
-          <span className="text-[11px] px-2 py-0.5 rounded-full bg-orange-500/15 text-orange-300">
+          <span className="text-[10px] px-3 py-2 rounded-full bg-orange-500/15 text-orange-300">
             {user.credits} credits
           </span>
         </div>

@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import useAuthStore from "../store/AuthStore.js";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import PaymentSuccess from "./pages/Pricing/components/PaymentSuccess.jsx";
 import PreviewPage from "./pages/Editor/components/PreviewPage.jsx";
 import AppNavbar from "./pages/LandingPage/components/AppNavbar";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
@@ -38,6 +39,7 @@ function AppContent() {
           <Route path="/editor" element={<EditorPage />} />
           <Route path="/editor/:id" element={<EditorPage />} />
           <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
         </Route>
 
         <Route path="/feature" element={<FeaturesPage />} />

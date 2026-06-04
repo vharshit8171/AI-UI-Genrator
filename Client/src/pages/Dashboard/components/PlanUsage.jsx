@@ -1,5 +1,6 @@
-import { PLAN } from "../../../constants/dashboardData.jsx";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../../../store/AuthStore.js";
+import { PLAN } from "../../../constants/dashboardData.jsx";
 
 
 function UsageBar({ label, used, total, unit = "" }) {
@@ -25,6 +26,7 @@ function UsageBar({ label, used, total, unit = "" }) {
 }
 
 export default function PlanUsage() {
+  const user = useAuthStore((state) => state.user);
 
   const navigate = useNavigate();
   return (
@@ -33,8 +35,8 @@ export default function PlanUsage() {
       <div className="flex items-center justify-between mb-5">
         <div>
           <p className="text-white/40 text-xs uppercase tracking-widest mb-1">Current Plan</p>
-          <p className="text-white font-black text-lg tracking-tight" style={{ fontFamily: "Syne, sans-serif" }}>
-            {PLAN.name}
+          <p className="text-white font-black text-md tracking-tight" style={{ fontFamily: "Syne, sans-serif" }}>
+            {user.role}
           </p>
         </div>
         <button onClick={() => navigate("/pricing")}

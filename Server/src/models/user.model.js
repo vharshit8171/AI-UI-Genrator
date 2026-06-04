@@ -69,12 +69,17 @@ const userSchema = new mongoose.Schema({
 
     credits: {
         type: Number,
-        default: 50,
+        default: 30,
+    },
+
+    stripeCustomerId: {
+        type: String,
+        default: null,
     },
 
     role: {
         type: String,
-        enum: ["free", "pro"],
+        enum: ["free", "pro", "premium"],
         default: "free",
     },
 

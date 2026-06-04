@@ -4,7 +4,7 @@ export default function FAQItem({ faq }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={`border rounded-lg overflow-hidden transition-all duration-200 ${
+    <div className={`border rounded-md overflow-hidden transition-all duration-200 ${
       open ? "border-orange-500/25 bg-orange-500/4" : "border-white/[0.07] bg-white/2 hover:border-white/15"
     }`}>
       <button onClick={() => setOpen(!open)}
@@ -16,7 +16,7 @@ export default function FAQItem({ faq }) {
       </button>
       {open && (
         <div className="px-6 pb-4">
-          <p className="text-white/45 text-sm leading-relaxed">{faq.a}</p>
+          <p className="text-white/75 text-md leading-relaxed">{faq.a}</p>
         </div>
       )}
     </div>

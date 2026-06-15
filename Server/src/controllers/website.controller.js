@@ -5,9 +5,16 @@ import { generateWebsiteService, getUserWebsitesService, getWebsiteByIdService, 
 
 export const generateWebsite = async (req, res) => {
     try {
-        const { prompt,aiModel } = req.body;
+        const { prompt, aiModel } = req.body;
         if (!prompt || typeof prompt !== 'string') {
             throw new ApiError(400, "prompt must be a non-empty string", ["prompt must be a non-empty string"])
+        }
+
+        const user = await User.findById(req.user._id).select("credits");
+        if (!user) { throw new ApiError(404, "User not found", ["User does not exists"]) }
+
+        if (user.credits < 10) {
+            throw new ApiError(403, "Insufficient credits", ["Insufficient credits."]);
         }
 
         const result = await generateWebsiteService({
@@ -25,6 +32,7 @@ export const generateWebsite = async (req, res) => {
             .status(201)
             .json(new ApiResponse(201, "Website generated successfully", result));
     } catch (error) {
+        console.log("error",error);
         return res
             .status(error.statusCode || 500)
             .json({

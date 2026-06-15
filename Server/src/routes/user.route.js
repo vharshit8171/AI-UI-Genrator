@@ -1,6 +1,7 @@
 import express from "express";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import {registerLimiter,loginLimiter} from "../middlewares/rateLimiter.js";
 import { validate } from "../middlewares/validate.middleware.js";
 import { registerUserSchema, loginUserSchema } from "../schema/user.schema.js";
 import {
@@ -23,6 +24,7 @@ const router = express.Router();
 router.route("/register").post(
   upload.single("avatar"),
   validate(registerUserSchema),
+  registerLimiter,
   registerUser
 );
 
@@ -33,6 +35,7 @@ router.route("/register").post(
  */
 router.route("/login").post(
   validate(loginUserSchema),
+  loginLimiter,
   loginUser
 );
 
@@ -41,7 +44,10 @@ router.route("/login").post(
  * @description Social login for a user
  * @access public
  */
-router.route("/social-login").post(socialLoginUser);
+router.route("/social-login").post(
+  loginLimiter,
+  socialLoginUser
+);
 
 /**
  * @route GET /api/v1/user/me

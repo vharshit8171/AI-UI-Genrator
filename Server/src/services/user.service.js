@@ -12,7 +12,7 @@ const signAccessToken = (user) =>
       role: user.role,
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "7d" }
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN || "1d" }
   );
 
 const signRefreshToken = (user) =>
@@ -107,7 +107,7 @@ export const socialLoginService = async (idToken) => {
     throw new ApiError(400, "Google email not verified", ["Google email not verified"]);
   }
 
-  const providerType = sign_in_provider === "github.com" ? "github" : "google"; 
+  const providerType = sign_in_provider === "github.com" ? "github" : "google";
 
   const safeName = name || email.split("@")[0];
   let user = await User.findOne({ email, });
@@ -145,9 +145,31 @@ export const socialLoginService = async (idToken) => {
 export const getCurrentUserService = async (userId) => {
   const user = await User.findById(userId);
   if (!user) {
-    throw new ApiError(404, "User not found",["User not found"]);
+    throw new ApiError(404, "User not found", ["User not found"]);
   }
   return user;
+};
+
+export const refreshTokenService = async (req) => {
+  const incomingRefreshToken = req.cookies.refreshToken;
+
+  if (!incomingRefreshToken) {
+    throw new ApiError(401, "Refresh token missing", ["Refresh token missing"]);
+  }
+
+  const decoded = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+  const user = await User.findById(decoded._id);
+
+  if (!user) {
+    throw new ApiError(401, "User not found", ["User not found"]);
+  }
+
+  if (user.refreshToken !== incomingRefreshToken) {
+    throw new ApiError(401, "Invalid refresh token", ["Invalid refresh token"]);
+  }
+
+  const newAccessToken = signAccessToken(user);
+  return newAccessToken;
 };
 
 export const deleteUserAccountService = async (userId) => {

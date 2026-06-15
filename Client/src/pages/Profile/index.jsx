@@ -66,7 +66,7 @@ const ProfilePage = () => {
         </div>
 
         {activeTab === "sites" ? (
-          <UserSitesSection sites={user.pages} />
+          <UserSitesSection />
         ) : (
           <PaymentHistorySection payments={payments} />
         )}

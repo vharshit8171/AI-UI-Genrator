@@ -2,6 +2,18 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import useSiteStore from "../../../../store/SiteStore.js";
 import ComponentRenderer from "../../Renderer/ComponentRenderer.jsx";
+import { ThemeContext } from "../../../context/ThemeContext.jsx";
+
+const defaultTheme = {
+  accent: "#f97316",
+  bg: "#0f172a",
+  surface: "rgba(255,255,255,0.04)",
+  text: "#ffffff",
+  mutedText: "rgba(255,255,255,0.6)",
+  radius: "rounded",
+  fontStyle: "modern",
+  mood: "dark",
+};
 
 export default function PreviewPage() {
   const { id } = useParams();
@@ -9,6 +21,11 @@ export default function PreviewPage() {
   const selectedSite = useSiteStore((state) => state.selectedSite);
   const fetchSiteById = useSiteStore((state) => state.fetchSiteById);
   const isFetching = useSiteStore((state) => state.isFetching);
+
+  const theme = {
+    ...defaultTheme,
+    ...(selectedSite?.theme || {})
+  };
 
   useEffect(() => {
     if (id) {
@@ -45,13 +62,19 @@ export default function PreviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white overflow-x-hidden">
+  <ThemeContext.Provider value={theme}>
+    <div
+      className="min-h-screen overflow-x-hidden"
+      style={{ background: theme.bg, color: theme.text }}
+    >
       {components.map((component, index) => (
         <ComponentRenderer
           key={component._id || index}
           component={component}
+          theme={theme}
         />
       ))}
     </div>
-  );
+  </ThemeContext.Provider>
+);
 }

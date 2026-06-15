@@ -121,7 +121,7 @@ const useAuthStore = create(
           if (payload.avatar) {
             formData.append("avatar", payload.avatar);
           }
-          const response = await axiosInstance.post("/user/register",formData)
+          const response = await axiosInstance.post("/user/register", formData)
           const user = mapUser(response.data.data);
           set({
             user,
@@ -136,6 +136,7 @@ const useAuthStore = create(
           return { success: true, user };
         } catch (err) {
           const message = err?.response?.data?.message || "Registration failed. Please try again.";
+
           _setError("register", message);
           return { success: false, error: message };
         } finally {
@@ -152,7 +153,7 @@ const useAuthStore = create(
 
         try {
           await delay(800);
-          const response = await axiosInstance.post("/user/login",{email,password});
+          const response = await axiosInstance.post("/user/login", { email, password });
           const user = mapUser(response.data.data);
 
           set({
@@ -167,9 +168,11 @@ const useAuthStore = create(
           _setSuccess("login", true);
           return { success: true, user };
         } catch (err) {
-          const message = err?.response?.data?.message || "Login failed. Please try again.";
+          const message = err?.response?.data?.message ||
+            "Login failed. Please try again.";
+
           _setError("login", message);
-          return { success: false, error: message };
+          return {success: false,error: message,};
         } finally {
           _setLoading("login", false);
         }
@@ -196,7 +199,7 @@ const useAuthStore = create(
           const result = await signInWithPopup(auth, provider);
           const idToken = await result.user.getIdToken(true);
 
-          const response = await axiosInstance.post("/user/social-login",{idToken});
+          const response = await axiosInstance.post("/user/social-login", { idToken });
           const user = mapUser(response.data.data);
           set({
             user,

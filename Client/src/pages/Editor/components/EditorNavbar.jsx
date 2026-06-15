@@ -5,6 +5,7 @@ import ModelSelector from "./ModelSelector.jsx";
 
 export default function EditorNavbar({ device, onDeviceChange, onPreview, onToggleCode, }) {
 
+  const selectedSite = useSiteStore((state) => state.selectedSite);
   const selectedModel = useSiteStore((state) => state.selectedModel);
   const setSelectedModel = useSiteStore((state) => state.setSelectedModel);
 
@@ -41,12 +42,12 @@ shadow-[0_4px_30px_rgba(0,0,0,0.45)] border-b border-white/10 flex items-center 
       </div>
 
       <div className="flex items-center gap-2">
-        <button onClick={onPreview}
+        <button disabled={!selectedSite} onClick={onPreview}
           className="flex items-center gap-1 bg-[#1a1a1d] hover:bg-[#232326] border border-white/10 text-white/90 hover:text-white text-md font-medium px-4 py-2.5 rounded-sm cursor-pointer">
           <Eye size={18} className="text-orange-400 font-semibold" /> Preview
         </button>
 
-        <button onClick={onToggleCode}
+        <button disabled={!selectedSite} onClick={onToggleCode}
           className="flex items-center gap-1 bg-[#1a1a1d] hover:bg-[#232326] border border-white/10 text-white/90 hover:text-white text-md font-medium px-4 py-2.5 rounded-sm cursor-pointer">
           <CodeXml size={18} className="text-orange-400 font-semibold" /> Source
         </button>

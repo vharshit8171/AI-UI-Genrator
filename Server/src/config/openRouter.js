@@ -11,154 +11,101 @@ export const generateWebsiteWithAI = async (
   aiModel = "llama-3.3-70b-versatile"
 ) => {
   try {
-    const masterPrompt = `You are an expert frontend UI generator.
+    const masterPrompt = `You are a JSON API. Output only raw JSON. No markdown, no code blocks, no comments.
 
-Generate ONLY ONE modern responsive webpage UI for:
-"${prompt}"
+Task: Generate a modern responsive webpage UI for: "${prompt}"
 
-Return ONLY valid JSON.
-No markdown.
-No explanations.
-No comments.
-No extra text.
-
-The webpage must:
-- look modern and clean
-- be mobile responsive
-- use good visual hierarchy
-- contain realistic content related to the prompt
-- focus only on frontend UI structure
-
-Return JSON in this exact format:
-
+OUTPUT FORMAT:
 {
   "title": "string",
   "description": "string",
-  "path": "string",
-  "components": []
-}
-
-Allowed component types:
-navbar
-hero
-features
-about
-services
-pricing
-testimonials
-stats
-cta
-faq
-contact
-gallery
-footer
-richtext
-
-Each component must follow this format:
-
-{
-  "type": "component_type",
-  "order": 1,
-  "props": {},
-  "styles": {
-    "bg": "string",
-    "text": "string"
-  }
-}
-
-Component props rules:
-
-navbar:
-{
-  "logo": "string",
-  "links": [
-    {
-      "label": "string",
-      "path": "string"
+  "path": "/lowercase-hyphenated",
+  "theme": {
+    "accent": "#hex",
+    "bg": "#hex",
+    "surface": "rgba(r,g,b,a)",
+    "text": "#hex",
+    "mutedText": "rgba(r,g,b,a)",
+    "radius": "sharp|rounded|pill",
+    "fontStyle": "modern|elegant|playful|technical",
+    "mood": "dark" | "light" | "glass"
+  },
+  "components": [{
+    "type": "string",
+    "order": 1,
+    "props": {},
+    "styles": {
+      "bg": "#hex",
+      "text": "#hex",
+      "accent": "#hex",
+      "layout": "centered|left|split",
+      "density": "compact|normal|spacious",
+      "pattern": "none|grid|dots|lines",
+      "glass": true,
+      "gradient": true
     }
-  ]
+  }]
 }
 
-hero:
-{
-  "headline": "string",
-  "subheadline": "string",
-  "buttons": [
-    {
-      "label": "string",
-      "path": "string"
-    }
-  ]
-}
+THEME RULES:
+- accent: brand color for buttons/highlights, must contrast on dark bg
+- bg: very dark hex (#0a0a0f #0f172a #111827)
+- surface: slightly lighter than bg for cards
+- radius: sharp=fintech/crypto, rounded=SaaS, pill=consumer/playful
+- fontStyle: modern=SaaS, elegant=luxury, playful=kids, technical=devtools
+- Match personality to page type
+- dark  → bg very dark, text white
+- light → bg very light, text dark
+- glass → semi-transparent surfaces with blur
 
-features:
-{
-  "title": "string",
-  "items": [
-    {
-      "title": "string",
-      "description": "string"
-    }
-  ]
-}
+STYLES RULES:
+- hero: gradient:true, density:spacious, layout:centered or split
+- features/services: glass:true, pattern:grid or dots
+- stats/cta: gradient:true, layout:centered
+- testimonials: glass:true, pattern:dots
+- about: layout:split
+- navbar/footer: density:compact, no pattern, no glass
+- Only set accent in styles if different from theme
+- bg must match theme palette
 
-services:
-{
-  "title": "string",
-  "items": [
-    {
-      "title": "string",
-      "description": "string"
-    }
-  ]
-}
+CONTENT DEPTH RULES (IMPORTANT):
+- features/services: MIN 6 items
+- testimonials: MIN 4 items
+- pricing: MIN 3 plans
+- stats: MIN 3 items
+- faq: MIN 4 items
+- gallery: MIN 6 items
+- navbar links: MIN 3 links
+- Descriptions and reviews must be specific, non-generic, 15–40 words.
+- Never generate fewer than required minimums.
 
-testimonials:
-{
-  "title": "string",
-  "items": [
-    {
-      "name": "string",
-      "review": "string"
-    }
-  ]
-}
+ALLOWED TYPES (4-5 total):
+navbar(required), hero, features, about, services, pricing, testimonials, stats, cta, faq, contact, gallery, richtext, footer(required)
 
-faq:
-{
-  "title": "string",
-  "items": [
-    {
-      "question": "string",
-      "answer": "string"
-    }
-  ]
-}
+PROPS SCHEMA:
+navbar: { logo:string, links:[{label, path}] }
+hero: { headline, subheadline, buttons:[{label, path}] }
+features: { title, items:[{title, description}] }
+about: { title, description }
+services: { title, items:[{title, description}] }
+pricing: { title, plans:[{name, price, features:[string]}] }
+testimonials: { title, items:[{name, review}] }
+stats: { title, items:[{label, value}] }
+cta: { headline, subheadline, button:{label, path} }
+faq: { title, items:[{question, answer}] }
+contact: { title, email, phone }
+gallery: { title, items:[{caption}] }
+richtext: { title, body }
+footer: { copyright }
 
-contact:
-{
-  "title": "string",
-  "email": "string",
-  "phone": "string"
-}
-
-footer:
-{
-  "copyright": "string"
-}
-
-Rules:
-- navbar must be first
-- footer must be last
-- use only allowed component types
-- use 4-7 components only
-- use hero only once
-- all component order values must be unique
-- path must start with "/"
-- keep JSON small and clean
-- avoid deeply nested objects
-- output must be valid for JSON.parse()
-`;
+STRICT RULES:
+1. navbar order:1, footer order:last
+2. order starts at 1, no gaps or duplicates
+3. path: lowercase, hyphenated, starts with /
+4. hero used at most once
+5. Only use defined keys, no extras
+6. All arrays must respect CONTENT DEPTH RULES
+7. Output valid JSON only`;
 
     const response = await groq.chat.completions.create({
       model: aiModel,

@@ -3,6 +3,7 @@ import {
   loginUserService,
   socialLoginService,
   getCurrentUserService,
+  refreshTokenService,
   deleteUserAccountService,
 } from "../services/user.service.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -143,26 +144,10 @@ const getCurrentUser = async (req, res) => {
 
 const refreshAccessToken = async (req, res) => {
   try {
-    const incomingRefreshToken = req.cookies.refreshToken;
+    const accessToken = await refreshTokenService(req);
 
-    if (!incomingRefreshToken) {
-      throw new ApiError(401, "Refresh token missing", ["Refresh token missing"]);
-    }
-
-    const decoded = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET);
-    const user = await User.findById(decoded._id);
-
-    if (!user) {
-      throw new ApiError(401, "User not found", ["User not found"]);
-    }
-
-    if (user.refreshToken !== incomingRefreshToken) {
-      throw new ApiError(401, "Invalid refresh token", ["Invalid refresh token"]);
-    }
-
-    const newAccessToken = signAccessToken(user);
     return res
-      .cookie("accessToken",newAccessToken,accessCookieOptions)
+      .cookie("accessToken",accessToken,accessCookieOptions)
       .status(200)
       .json({success: true});
   } catch (error) {

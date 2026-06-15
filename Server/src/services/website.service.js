@@ -11,6 +11,7 @@ export const generateWebsiteService = async ({ userId, prompt, aiModel, }) => {
     },];
 
     const aiResponse = await generateWebsiteWithAI(prompt, aiModel);
+    console.log("aiRes",aiResponse);
 
     messages.push({
         role: "ai",
@@ -21,6 +22,7 @@ export const generateWebsiteService = async ({ userId, prompt, aiModel, }) => {
         owner: userId,
         title: aiResponse.title,
         description: aiResponse.description || "",
+        theme: aiResponse.theme,
         path: aiResponse.path,
         prompts: messages,
         aiModel: aiModel || "llama-3.3-70b-versatile",
@@ -38,7 +40,7 @@ export const generateWebsiteService = async ({ userId, prompt, aiModel, }) => {
         });
     }
 
-    return { page, components: sortedComponents, };
+    return { page, components: sortedComponents, theme: aiResponse.theme };
 };
 
 

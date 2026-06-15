@@ -20,13 +20,19 @@ export default function EditorPage() {
   useEffect(() => {
     if (!isEditMode) return;
     fetchSiteById(id);
-  }, [id,fetchSiteById,isEditMode]);
+  }, [id, fetchSiteById, isEditMode]);
+
   return (
     <div className="h-screen bg-[#0a0907] flex flex-col overflow-hidden">
 
       <EditorNavbar device={device}
         onDeviceChange={setDevice}
-        onPreview={() => window.open(`/preview/${selectedSite._id}/${selectedSite?.path === "/" ? "home" : ''}`, "_blank")}
+        onPreview={() => window.open(`/preview/${selectedSite._id}/${selectedSite.path === "/"
+          ? "home"
+          : selectedSite.path.replace("/", "")
+          }`,
+          "_blank"
+        )}
         site={selectedSite}
         onToggleCode={() => setIsCodeOpen(prev => !prev)}
       />

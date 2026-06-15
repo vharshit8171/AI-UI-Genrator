@@ -1,6 +1,6 @@
 # AI UI Builder
 
-An AI-powered full-stack UI builder that transforms natural language prompts into production-ready user interfaces. Users simply describe their idea, and the platform intelligently generates modern, responsive UI code using AI, allowing developers and non-developers to accelerate the application development process.
+An AI-powered UI builder that transforms natural language prompts into production-ready user interfaces. Users simply describe their idea, and the platform intelligently generates modern, responsive UI code using AI, helping developers and non-developers accelerate the application development process.
 
 ---
 
@@ -8,14 +8,13 @@ An AI-powered full-stack UI builder that transforms natural language prompts int
 
 * 🤖 AI-powered UI generation from natural language prompts
 * 🎨 Modern and responsive UI generation
-* 🔐 Secure authentication with Email/Password and Social Login
+* 🔐 Secure authentication with Email/Password and Social login
 * 👤 User profile management with avatar uploads
-* 📂 Project creation, storage, and management
-* 💾 Persistent project history and user workspace
-* ⚡ Real-time AI code generation workflow
-* 🔄 Session management with JWT authentication & refresh tokens
+* 💳 Stripe-powered credit purchase system
+* 📜 Payment history management
+* 🔄 Session management with JWT authentication
 * 🛡️ Protected routes and secure API access
-* 🚦 Rate limiting and request validation using zod
+* 🚦 Rate limiting and request validation using Zod
 * ☁️ Cloud-based media storage and asset management
 
 ---
@@ -30,7 +29,7 @@ An AI-powered full-stack UI builder that transforms natural language prompts int
 * 🧠 Zustand (State Management)
 * 🔐 Protected Routing
 * 🌐 Axios
-* 📝 Firebase
+* 🔥 Firebase Authentication
 
 ### Backend
 
@@ -38,12 +37,12 @@ An AI-powered full-stack UI builder that transforms natural language prompts int
 * 🚂 Express.js
 * 🍃 MongoDB (Mongoose)
 * 🔐 JWT Authentication
+* 💳 Stripe Payment Processing
 * ☁️ ImageKit (Media Storage)
 * 📤 Multer (File Upload Handling)
-* 🛡️ Express Rate Limiting
 * ✅ Zod Validation
 
-### AI & Deployment
+### AI Integration
 
 * 🤖 OpenRouter API
 * 🧠 Large Language Models (LLMs)
@@ -71,6 +70,25 @@ An AI-powered full-stack UI builder that transforms natural language prompts int
 * `/api/projects/delete`
 * `/api/projects/:id`
 
+### Payments & Credits
+
+* `/api/payments/create-checkout-session`
+* `/api/payments/verify`
+* `/api/payments/payments-history`
+* `/api/payments/payment-delete/:paymentId`
+
+---
+
+## 💳 Credit & Payment System
+
+Users can purchase credits through Stripe Checkout. After successful payment verification:
+
+* Credits are automatically added to the user's account
+* Payment records are stored securely
+* Users can view their transaction history from their profile
+* Credit balance is updated instantly
+* AI generations consume credits based on usage
+
 ---
 
 ## 🛡️ Security Practices
@@ -81,6 +99,7 @@ An AI-powered full-stack UI builder that transforms natural language prompts int
 * Role-Based Authorization
 * Zod Request Validation
 * Secure File Upload Handling
+* Stripe Payment Verification
 * Centralized Error Handling
 
 ---
@@ -92,17 +111,18 @@ An AI-powered full-stack UI builder that transforms natural language prompts int
 * Reusable API & Validation Layers
 * Centralized State Management with Zustand
 * Clean Separation of Frontend & Backend Concerns
-* AI Service Layer for Prompt Processing & Code Generation
+* Separate Payment & Credit Management System
 
 ---
 
 ## 📌 Future Improvements
 
-* 💬 AI-powered project chat assistant
 * 🧩 Multi-page application generation
+* 💬 AI-powered project chat assistant
 * 👥 Team collaboration workspace
 * 🔄 Real-time collaborative editing
-* 🚀 CI/CD integration for deployments
+* 🧠 AI context persistence
+* 🚀 CI/CD integration and deployment automation
 
 ---
 
@@ -110,3 +130,5 @@ An AI-powered full-stack UI builder that transforms natural language prompts int
 
 **Harshit Verma**
 Frontend-Focused Full Stack Developer
+
+GitHub: https://github.com/vharshit8171

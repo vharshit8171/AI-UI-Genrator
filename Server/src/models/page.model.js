@@ -40,6 +40,20 @@ const pageSchema = new mongoose.Schema(
       maxlength: 300,
     },
 
+    theme: {
+      type: Object,
+      default: {
+        accent: "#f97316",
+        bg: "#0f172a",
+        surface: "rgba(255,255,255,0.04)",
+        text: "#ffffff",
+        mutedText: "rgba(255,255,255,0.6)",
+        radius: "rounded",
+        fontStyle: "modern",
+        mood: { type: String, enum: ["dark", "light", "glass"], default: "dark" },
+      },
+    },
+
     path: {
       type: String,
       match: /^\/([a-z0-9-]+)?$/,

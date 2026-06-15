@@ -1,5 +1,6 @@
 import { Bot } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 import { useState, useRef, useEffect } from "react";
 import useAuthStore from "../../../../store/AuthStore.js";
 import useSiteStore from "../../../../store/SiteStore.js";
@@ -17,7 +18,7 @@ function Message({ msg }) {
       )}
       {!isAI && (
         <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center overflow-hidden text-[10px] text-white shrink-0 mt-0.5">
-          <img src={user.avatar} />
+          <img src={user.avatar} alt="avatar" />
         </div>
       )}
       <div className={`max-w-[85%] px-2 py-1.5 rounded-sm text-sm leading-relaxed ${isAI
@@ -51,23 +52,22 @@ export default function AIChatPanel({ prompts }) {
   const user = useAuthStore((state) => state.user);
   const createSite = useSiteStore((state) => state.createSite);
   const isCreating = useSiteStore((state) => state.isCreating);
+  const createError = useSiteStore((state) => state.createError);
   const globalPrompt = useSiteStore((state) => state.globalPrompt);
   const setglobalPrompt = useSiteStore((state) => state.setglobalPrompt);
 
-  const promptMessages = (prompts || []).map((p) => ({
-    id: `prompt-${p.content}`,
-    role: p.role,
-    text: p.content,
-  }));
-  // Combine old messages i.e prompts and new messgaes if user sends into this allMessages array and render this in the UI instead of messages array so that old messages i.e prompts will also be visible in the UI
-  const allMessages = [...promptMessages, ...messages];
+  useEffect(() => {
+    if (createError) {
+      toast.error(createError);
+    }
+  }, [createError]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
-    function globalPromptFunc() {
+    const globalPromptFunc = () => {
       if (globalPrompt && !input) {
         setInput(globalPrompt);
       }
@@ -76,12 +76,21 @@ export default function AIChatPanel({ prompts }) {
     globalPromptFunc();
   }, [globalPrompt, input]);
 
+  const promptMessages = (prompts || []).map((p) => ({
+    id: `prompt-${p.content}`,
+    role: p.role,
+    text: p.content,
+  }));
+
+  const allMessages = [...promptMessages, ...messages];
+
   const sendMessage = async (text) => {
     const trimmed = text.trim();
     if (!trimmed || isCreating) return;
-    // Check if this message already exists
-    const messageExists = messages.some(msg => msg.text === trimmed);
+
+    const messageExists = messages.some((msg) => msg.text === trimmed);
     if (messageExists) return;
+
     setMessages((prev) => [
       ...prev,
       { id: uuidv4(), role: "user", text: trimmed },
@@ -89,26 +98,30 @@ export default function AIChatPanel({ prompts }) {
     setInput("");
     setglobalPrompt("");
 
-    const loadingId = Date.now() + 1;
+    const loadingId = uuidv4();
     setMessages((prev) => [
       ...prev,
-      { id: loadingId, role: "ai", text: "⚡ Generating your website...", loading: true },
+      {
+        id: loadingId,
+        role: "ai",
+        text: "⚡ Building your UI ...",
+        loading: true,
+      },
     ]);
+
     const result = await createSite(trimmed);
 
-    setMessages((prev) => {
-      const updated = [...prev];
-      const index = updated.findIndex((msg) => msg.id === loadingId);
-      updated[index] = {
+    setMessages((prev) =>
+      prev.map((msg) => msg.id === loadingId ? {
         id: uuidv4(),
         role: "ai",
         text: result.success
           ? "✅ Page generated successfully!"
           : `❌ ${result.error}`,
         loading: false,
-      };
-      return updated;
-    });
+      } : msg
+      )
+    );
   };
 
   const handleKeyDown = (e) => {
@@ -121,30 +134,28 @@ export default function AIChatPanel({ prompts }) {
   return (
     <div className="flex flex-col h-full bg-[#0e0e10]">
       <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-4">
-
         {allMessages.map((msg) => (
           <Message key={msg.id} msg={msg} />
         ))}
         <div ref={bottomRef} />
       </div>
 
-      <div className="px-3 pb-0.5">
-        <div className={`flex items-end gap-2 bg-white/5 border rounded-md px-3 py-2 ${focused ? "border-orange-400/50" : "border-white/10"
-          }`}>
-
+      <div className="px-3 pb-1.5">
+        <div className={`flex items-end gap-2 bg-white/5 border rounded-xs px-3 py-2 ${focused ? "border-orange-400/50" : "border-white/10"
+          }`}
+        >
           <textarea value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            placeholder="Ask anything..."
-            rows={3}
+            placeholder="Describe your page. Tip: include the type, purpose and key sections."
+            rows={4}
             className="flex-1 bg-transparent text-base text-white outline-none resize-none"
           />
-
           <button onClick={() => sendMessage(input)}
             disabled={!input.trim() || isCreating}
-            className="w-8 h-8 bg-orange-500 hover:bg-orange-400 disabled:opacity-30 rounded-md flex items-center justify-center text-black"
+            className="w-8 h-8 bg-orange-500 cursor-pointer hover:bg-orange-400 disabled:opacity-30 rounded-sm flex items-center justify-center text-black"
           >
             ↑
           </button>

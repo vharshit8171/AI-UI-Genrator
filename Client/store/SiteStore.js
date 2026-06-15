@@ -38,11 +38,21 @@ const useSiteStore = create(
           credentials: "include",
         });
         const finalResult = await res.json();
-        const responseData = finalResult?.data;
 
+        if (!res.ok) {
+          const errorMessage = finalResult?.message || "Something went wrong. Please try again.";
+          set({
+            createError: errorMessage,
+            isCreating: false,
+          });
+          return { success: false, error: errorMessage };
+        }
+
+        const responseData = finalResult?.data;
         const newSite = {
           ...responseData.page,
           components: responseData.components,
+          theme: responseData?.theme
         };
 
         set((state) => ({
@@ -57,7 +67,6 @@ const useSiteStore = create(
           createError: error.message,
           isCreating: false,
         });
-
         return { success: false, error: error.message };
       }
     },
